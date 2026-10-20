@@ -46,11 +46,9 @@ export function App() {
       const cleanup = [];
       const ctx = gsap.context(() => {
       // Each element has one opacity owner. Scroll never fades the opening copy.
-      gsap.fromTo('.hero-copy-reveal,.portrait-name,.topbar',
-        { y: 20, opacity: .3 },
-        { y: 0, opacity: 1, duration: 1.1, stagger: .1, ease: 'power3.out' });
-      gsap.fromTo('.portrait-photo', { y: 24 }, { y: 0, duration: 1.25, ease: 'power3.out' });
-      gsap.to('.portrait-photo img', { y: 25, ease: 'none', scrollTrigger: { trigger: '#inicio', start: 'top top', end: 'bottom top', scrub: 1 } });
+      gsap.fromTo('.hero-copy-reveal,.portrait-name,.topbar,.portrait-photo',
+        { y: 12, opacity: .8 },
+        { y: 0, opacity: 1, duration: .7, stagger: .06, ease: 'power3.out' });
       for (const element of gsap.utils.toArray('[data-reveal]')) {
         gsap.fromTo(element, { y: 32, opacity: .3 }, {
           y: 0, opacity: 1, duration: .85, ease: 'power3.out', immediateRender: false,
@@ -59,7 +57,7 @@ export function App() {
       }
       gsap.fromTo('.footer-curve', { height: 90 }, { height: 12, ease: 'none', scrollTrigger: { trigger: 'footer', start: 'top bottom', end: 'top 20%', scrub: 1 } });
       if (matchMedia('(pointer:fine)').matches) {
-        for (const item of root.current.querySelectorAll('.menu-button,.hero-project-link')) {
+        for (const item of root.current.querySelectorAll('.menu-button')) {
           const move = e => { const b = item.getBoundingClientRect(); gsap.to(item, { x: (e.clientX - b.left - b.width / 2) * .12, y: (e.clientY - b.top - b.height / 2) * .12, duration: .5, overwrite: 'auto' }); };
           const leave = () => gsap.to(item, { x: 0, y: 0, duration: .7, ease: 'elastic.out(1,.5)', overwrite: 'auto' });
           item.addEventListener('pointermove', move); item.addEventListener('pointerleave', leave);
