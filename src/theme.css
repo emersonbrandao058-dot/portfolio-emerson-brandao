@@ -1,0 +1,74 @@
+/* Emerson Brandão — graphite theme. Surface roles shared by every section. */
+:root {
+  color-scheme: dark;
+  --canvas: #141516;
+  --opening: #191a1d;
+  --surface: #202226;
+  --surface-hover: #25272c;
+  --footer: #0e0f11;
+  --ink: #efefeb;
+  --muted: #b2b3ba;
+  --quiet: #999ba5;
+  --line: #36383f;
+  --accent: #5264df;
+  --accent-hover: #5667e0;
+  color: var(--ink);
+  background: var(--canvas);
+  scrollbar-color: #575963 var(--canvas);
+  caret-color: var(--accent-hover);
+}
+body, main { background: var(--canvas); }
+::selection { color: #fff; background: #4858be; }
+a:focus-visible, button:focus-visible { outline-color: #98a4ff; }
+a { text-underline-offset: .25em; }
+.typography-hero { background: var(--opening); color: var(--ink); }
+.typography-hero .topbar nav a:after { background: var(--accent-hover); }
+.topbar a { color: #dedee3; transition: color .25s; }
+.topbar a:hover { color: #fff; }
+.hero-name { color: var(--ink); }
+.name-period { color: var(--accent); }
+.hero-location, .hero-location>span { color: var(--quiet); }
+.hero-intro>span { color: var(--muted); }
+.hero-project-link { border-color: #626570; color: var(--ink); background: #202226; }
+.hero-link-arrow { background: var(--accent); color: #fff; }
+.hero-project-link:hover, .hero-project-link:focus-visible { color: #fff; background: #2c3044; border-color: var(--accent-hover); }
+.hero-project-link:hover .hero-link-arrow { background: var(--accent-hover); }
+.typography-hero .hero-bottom { border-color: var(--line); color: #c3c4ca; }
+.hero-bottom a:hover { color: #fff; }
+.eyebrow { color: var(--quiet); }
+.intro-copy { color: var(--muted); }
+.text-link { border-color: #626570; color: var(--ink); transition: border-color .25s, color .25s; }
+.text-link:hover { color: #b3bcff; border-color: var(--accent-hover); }
+.project-row, .project-row:last-child { border-color: var(--line); color: var(--ink); }
+.project-row:before { background: var(--surface-hover); }
+.project-row:hover, .project-row:focus-visible { color: #fff; }
+.project-number { color: var(--quiet); }
+.project-category, .project-name small { color: var(--muted); }
+.project-arrow { color: #a5afff; }
+.project-thumbnail { background: var(--surface); }
+.project-preview.real-preview { background: #303239; box-shadow: 0 24px 64px #0008; }
+.preview-circle { background: var(--accent); color: #fff; }
+.in-progress p, .experience p:not(.eyebrow) { color: var(--muted); }
+.in-progress strong { color: var(--ink); }
+.skills span { color: #c3c4cb; border-color: #454750; background: #1c1e22; }
+footer { background: var(--footer); color: var(--ink); }
+.footer-curve { background: var(--canvas); }
+.contact-line { background: var(--line); }
+.contact-circle, .solid-link { background: var(--accent); color: #fff; }
+.contact-circle:hover { background: var(--accent-hover); }
+.contact-circle:before, .solid-link:before { background: #4859d0; }
+.contact-links a { border-color: #626570; color: var(--ink); }
+.contact-links a:before { background: #4859d0; }
+.contact-links a:hover { border-color: #8c9aff; }
+.footer-bottom { color: var(--quiet); }
+.footer-bottom a { color: var(--ink); }
+.menu-button { color: var(--ink); background: #282b34; border-color: #626570; box-shadow: 0 8px 24px #0004; }
+.menu-button.active { background: #4859d0; border-color: #8c9aff; }
+.menu-overlay { background: #1a1c21; color: var(--ink); }
+.menu-overlay>p { color: var(--quiet); border-color: var(--line); }
+.menu-overlay nav a:hover { color: #a5afff; }
+.micro-button { background: var(--footer); }
+.micro-base { stroke: #626570; }
+.micro-label { color: var(--muted); }
+.micro-button[aria-disabled=true]+.micro-label { color: var(--quiet); }
+.skip { background: var(--ink); color: var(--canvas); }

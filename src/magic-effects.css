@@ -1,0 +1,76 @@
+/* Magic UI effects adapted to the portfolio's semantic palette. */
+:root { --terminal-bg:#191b20; --terminal-header:#1e2026; --terminal-command:#96b0ff; --control-border:#626570; }
+.theme-switcher { position:fixed;z-index:25;top:22px;right:30px;display:grid;place-items:center;width:44px;height:44px;padding:0;border:1px solid var(--control-border);border-radius:50%;background:var(--surface);color:var(--ink);cursor:pointer;transition:right .35s,top .35s,background .2s; }
+.theme-switcher svg { width:19px;height:19px;stroke-width:1.6; }
+.theme-switcher:hover { background:var(--surface-hover); }
+.theme-switcher.with-menu { right:104px;top:35px; }
+.portrait-hero .topbar nav { padding-right:76px; }
+.intro-copy { min-width:0; }
+.intro-copy>.text-link { margin-top:32px; }
+.about-terminal { background:var(--terminal-bg);border:1px solid var(--line);border-radius:13px;overflow:hidden;width:100%;color:var(--ink); }
+.terminal-chrome { display:flex;align-items:center;gap:16px;padding:14px 18px;border-bottom:1px solid var(--line);background:var(--terminal-header);min-height:49px; }
+.terminal-lights { display:flex;gap:6px;flex-shrink:0; }
+.terminal-lights svg { width:8px;height:8px;stroke:none;fill:#ed6a5e; }
+.terminal-lights svg:nth-child(2) { fill:#dbaa36; }
+.terminal-lights svg:nth-child(3) { fill:#58a960; }
+.terminal-title { color:var(--muted);font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:14px;line-height:1; }
+.terminal-replay { margin-left:auto;display:grid;place-items:center;min-width:28px;min-height:28px;padding:4px;border:0;background:transparent;color:var(--muted);border-radius:4px; }
+.terminal-replay:hover { color:var(--terminal-command); }
+.terminal-body { padding:22px 20px 25px;font:14px/1.85 ui-monospace,SFMono-Regular,Consolas,monospace;overflow-wrap:anywhere; }
+.terminal-line { min-height:1.85em;visibility:hidden;opacity:0;translate:0 -3px;transition:opacity .25s,translate .25s;color:var(--muted); }
+.terminal-line.is-visible { visibility:visible;opacity:1;translate:0 0; }
+.terminal-command { color:var(--terminal-command); }
+.terminal-command:not(:first-child) { margin-top:13px; }
+.terminal-name { color:var(--ink);font-weight:600; }
+.terminal-caret { display:inline-block;height:1em;width:6px;margin-left:2px;vertical-align:-2px;background:currentColor;animation:terminal-caret .8s step-end infinite; }
+@keyframes terminal-caret { 50%{opacity:0} }
+/* Restrict snapshot overrides to this effect, leaving other transitions alone. */
+html[data-magicui-theme-vt='active']::view-transition-group(root) { animation-duration:var(--magicui-theme-toggle-vt-duration,450ms); }
+html[data-magicui-theme-vt='active']::view-transition-old(root),
+html[data-magicui-theme-vt='active']::view-transition-new(root) { animation:none;mix-blend-mode:normal; }
+html[data-magicui-theme-vt='active']::view-transition-old(root) { z-index:1; }
+html[data-magicui-theme-vt='active']::view-transition-new(root) { z-index:2;clip-path:var(--magicui-theme-vt-clip-from); }
+
+html[data-theme='light'] {
+  color-scheme:light;
+  --canvas:#f4f3ef; --opening:#eeede8; --surface:#fff; --surface-hover:#e7e7e1;
+  --footer:#e5e4de; --ink:#202126; --muted:#585b64; --quiet:#62656e;
+  --line:#c8c9ce; --accent:#485acb; --accent-hover:#4052c3;
+  --terminal-bg:#fdfdf9; --terminal-header:#e9e9e4; --terminal-command:#3e53b4; --control-border:#7a7d87;
+  scrollbar-color:#90939d var(--canvas);
+}
+html[data-theme='light'] a:focus-visible,html[data-theme='light'] button:focus-visible { outline-color:#485acb; }
+html[data-theme='light'] .portrait-hero { background:var(--opening); }
+html[data-theme='light'] .topbar a { color:var(--ink); }
+html[data-theme='light'] .topbar a:hover { color:var(--accent); }
+html[data-theme='light'] .portrait-photo img { filter:grayscale(1) brightness(.96) contrast(1.04); }
+html[data-theme='light'] .hero-copy-reveal p { color:var(--ink);font-weight:450; }
+html[data-theme='light'] .portrait-hero .hero-project-link { background:#f6f6f1;color:var(--ink);border-color:var(--control-border); }
+html[data-theme='light'] .portrait-hero .hero-project-link:hover { background:var(--accent);color:#fff;border-color:var(--accent); }
+html[data-theme='light'] .portrait-hero .hero-bottom { border-color:var(--line);color:var(--muted); }
+html[data-theme='light'] .hero-bottom a:hover { color:var(--ink); }
+html[data-theme='light'] .text-link:hover { color:var(--accent);border-color:var(--accent); }
+html[data-theme='light'] .project-row:hover,html[data-theme='light'] .project-row:focus-visible { color:var(--ink); }
+html[data-theme='light'] .project-arrow { color:var(--accent); }
+html[data-theme='light'] .project-in-progress h3>span,
+html[data-theme='light'] .experience-editorial .employment-heading p,
+html[data-theme='light'] .employment .skills span { color:#4052ac; }
+html[data-theme='light'] .employment li { border-color:var(--line); }
+html[data-theme='light'] .contact-links a:hover { color:#fff;border-color:var(--accent); }
+html[data-theme='light'] .menu-button { background:#fdfdf9;color:var(--ink);border-color:var(--control-border);box-shadow:0 8px 24px #25262714; }
+html[data-theme='light'] .menu-button.active { background:var(--accent);color:#fff; }
+html[data-theme='light'] .menu-overlay { background:#f4f3ef;color:var(--ink); }
+html[data-theme='light'] .menu-overlay nav a:hover { color:var(--accent); }
+html[data-theme='light'] .micro-swap:not(.micro-arrow) { color:var(--ink); }
+html[data-theme='light'] .micro-button[data-network="github"] { color:#25272d!important; }
+html[data-theme='light'] .micro-button[data-network="linkedin"] { color:#0866a6!important; }
+html[data-theme='light'] .micro-button[data-network="instagram"] { color:#b32e51!important; }
+html[data-theme='light'] .micro-button[data-network="whatsapp"] { color:#157a3e!important; }
+html[data-theme='light'] .micro-button[data-network="gmail"] { color:#ba3027!important; }
+html[data-theme='light'] .stack-strip { color:#454851; }
+html[data-theme='light'] .stack-pause:hover,html[data-theme='light'] .stack-pause[aria-pressed=true] { background:#dde1f4;color:#3545ae;border-color:var(--accent); }
+html[data-theme='light'] .tech-stack .logoloop__item:hover .logoloop__content { color:var(--accent); }
+@media(max-width:700px) { .theme-switcher{top:18px;right:20px}.theme-switcher.with-menu{right:84px;top:21px}.terminal-body{padding:20px 16px 23px;font-size:14px}.terminal-chrome{padding:12px 15px;gap:12px}.terminal-title{font-size:14px}.terminal-replay{min-width:32px;min-height:32px}.portrait-hero .topbar{padding-right:calc(var(--page-gutter) + 60px)} }
+@media(prefers-reduced-motion:reduce) { .theme-switcher,.terminal-line{transition:none}.terminal-caret{animation:none} }
+
+.portrait-hero .topbar nav a:after{background:var(--accent-hover)}
