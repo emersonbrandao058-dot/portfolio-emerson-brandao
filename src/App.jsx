@@ -15,6 +15,96 @@ const projects = [
   { name: 'Bacelar Educa', description: 'Plataforma de reforço escolar com questões, listas e perfis de acesso. A versão pública está em preparação.', url: 'mailto:emersonbrandao058@gmail.com?subject=Apresenta%C3%A7%C3%A3o%20do%20Bacelar%20Educa', cover: assetUrl('/assets/bacelar-cover.svg'), technologies: ['Next.js', 'TypeScript', 'Supabase'], inProgress: true },
 ];
 
+function PortraitColorReveal() {
+  const photo = useRef(null);
+  const canvas = useRef(null);
+
+  useEffect(() => {
+    const image = photo.current;
+    const overlay = canvas.current;
+    const context = overlay.getContext('2d');
+    if (!context) return;
+    const motion = gsap.matchMedia();
+    motion.add('(prefers-reduced-motion: no-preference)', () => {
+      let trigger;
+      let disposed = false;
+      let width = 0, height = 0, dpr = 1;
+      let drawWidth = 0, drawHeight = 0, x = 0, y = 0;
+
+      const draw = () => {
+        if (!width || !height || !image.naturalWidth) return;
+        context.setTransform(dpr, 0, 0, dpr, 0, 0);
+        context.clearRect(0, 0, width, height);
+        const progress = trigger?.progress ?? 0;
+        if (progress <= 0 || progress >= 1) return;
+        // Match object-fit: contain and the image's responsive object-position.
+        context.globalCompositeOperation = 'source-over';
+        context.drawImage(image, x, y, drawWidth, drawHeight);
+        const band = drawHeight * .26;
+        const center = y - band / 2 + progress * (drawHeight + band);
+        const feather = context.createLinearGradient(0, center - band / 2, 0, center + band / 2);
+        feather.addColorStop(0, 'transparent');
+        feather.addColorStop(.35, '#000');
+        feather.addColorStop(.65, '#000');
+        feather.addColorStop(1, 'transparent');
+        context.globalCompositeOperation = 'destination-in';
+        context.fillStyle = feather;
+        context.fillRect(0, 0, width, height);
+        context.globalCompositeOperation = 'source-over';
+      };
+
+      const measure = () => {
+        width = image.clientWidth;
+        height = image.clientHeight;
+        dpr = Math.min(window.devicePixelRatio || 1, 2);
+        overlay.width = Math.round(width * dpr);
+        overlay.height = Math.round(height * dpr);
+        const scale = Math.min(width / image.naturalWidth, height / image.naturalHeight);
+        drawWidth = image.naturalWidth * scale;
+        drawHeight = image.naturalHeight * scale;
+        const [horizontal, vertical] = getComputedStyle(image).objectPosition.split(' ').map(parseFloat);
+        x = (width - drawWidth) * horizontal / 100;
+        y = (height - drawHeight) * vertical / 100;
+        draw();
+      };
+
+      const ready = () => {
+        if (disposed || trigger || !image.naturalWidth) return;
+        measure();
+        trigger = ScrollTrigger.create({
+          trigger: image.closest('.portrait-hero'),
+          start: 'top top',
+          end: () => `+=${Math.max(1, drawHeight * .65)}`,
+          onUpdate: draw,
+          onRefresh: measure,
+        });
+        observer.observe(image);
+        draw();
+      };
+      const observer = new ResizeObserver(() => {
+        measure();
+        trigger?.refresh();
+      });
+      image.addEventListener('load', ready);
+      if (image.complete) ready();
+      return () => {
+        disposed = true;
+        image.removeEventListener('load', ready);
+        observer.disconnect();
+        trigger?.kill();
+        context.clearRect(0, 0, overlay.width, overlay.height);
+        overlay.width = overlay.height = 0;
+      };
+    });
+    return () => motion.revert();
+  }, []);
+
+  return <div className="portrait-photo">
+    <img ref={photo} src={assetUrl('/assets/emerson-portrait.webp')} alt="Retrato de Emerson Brandão" width="1254" height="1254" fetchPriority="high" />
+    <canvas ref={canvas} className="portrait-color" aria-hidden="true" />
+  </div>;
+}
+
 export function App() {
   const [menu, setMenu] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
@@ -93,7 +183,7 @@ export function App() {
         <nav aria-label="Principal"><a href="#projetos">Projetos</a><a href="#sobre">Sobre</a><a href="#contato">Contato</a></nav>
       </header>
       <div className="hero-stage content"><h1 className="portrait-name"><span>Emerson</span><span>Brandão</span></h1>
-      <div className="portrait-photo"><img src={assetUrl("/assets/emerson-portrait.webp")} alt="Retrato de Emerson Brandão" width="1254" height="1254" fetchPriority="high" /></div>
+      <PortraitColorReveal />
       <div className="hero-intro"><div className="hero-copy-reveal">
         <h2>Web designer<br/>{' '}e desenvolvedor.</h2>
         <p>Crio sites que unem identidade visual, navegação clara e cuidado em cada detalhe.</p>
