@@ -52,16 +52,8 @@ a { text-underline-offset: .25em; }
 .in-progress strong { color: var(--ink); }
 .skills span { color: #c3c4cb; border-color: #454750; background: #1c1e22; }
 footer { background: var(--footer); color: var(--ink); }
-.footer-curve { background: var(--canvas); }
-.contact-line { background: var(--line); }
-.contact-circle, .solid-link { background: var(--accent); color: #fff; }
-.contact-circle:hover { background: var(--accent-hover); }
-.contact-circle:before, .solid-link:before { background: #4859d0; }
-.contact-links a { border-color: #626570; color: var(--ink); }
-.contact-links a:before { background: #4859d0; }
-.contact-links a:hover { border-color: #8c9aff; }
-.footer-bottom { color: var(--quiet); }
-.footer-bottom a { color: var(--ink); }
+.solid-link { background: var(--accent); color: #fff; }
+.solid-link:before { background: #4859d0; }
 .menu-button { color: var(--ink); background: #282b34; border-color: #626570; box-shadow: 0 8px 24px #0004; }
 .menu-button.active { background: #4859d0; border-color: #8c9aff; }
 .menu-overlay { background: #1a1c21; color: var(--ink); }
@@ -70,5 +62,4 @@ footer { background: var(--footer); color: var(--ink); }
 .micro-button { background: var(--footer); }
 .micro-base { stroke: #626570; }
 .micro-label { color: var(--muted); }
-.micro-button[aria-disabled=true]+.micro-label { color: var(--quiet); }
 .skip { background: var(--ink); color: var(--canvas); }

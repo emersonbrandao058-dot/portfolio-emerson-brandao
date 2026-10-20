@@ -56,7 +56,6 @@ html[data-theme='light'] .project-in-progress h3>span,
 html[data-theme='light'] .experience-editorial .employment-heading p,
 html[data-theme='light'] .employment .skills span { color:#4052ac; }
 html[data-theme='light'] .employment li { border-color:var(--line); }
-html[data-theme='light'] .contact-links a:hover { color:#fff;border-color:var(--accent); }
 html[data-theme='light'] .menu-button { background:#fdfdf9;color:var(--ink);border-color:var(--control-border);box-shadow:0 8px 24px #25262714; }
 html[data-theme='light'] .menu-button.active { background:var(--accent);color:#fff; }
 html[data-theme='light'] .menu-overlay { background:#f4f3ef;color:var(--ink); }

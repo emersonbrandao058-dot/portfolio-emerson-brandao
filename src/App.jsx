@@ -1,6 +1,6 @@
 import { assetUrl } from './asset-url.js';
 import React, { useEffect, useRef, useState } from 'react';
-import { Menu, X, ArrowUpRight, ArrowDown, Download } from 'lucide-react';
+import { Menu, X, ArrowUpRight, ArrowDown } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SocialButtons } from './SocialButtons.jsx';
@@ -110,7 +110,46 @@ export function App() {
   const [showMenu, setShowMenu] = useState(false);
   const root = useRef(null);
   const menuButton = useRef(null);
+  const glassTitle = useRef(null);
   const close = () => setMenu(false);
+
+  useEffect(() => {
+    const title = glassTitle.current;
+    const media = matchMedia('(pointer: fine) and (hover: hover) and (prefers-reduced-motion: no-preference)');
+    let frame = 0;
+    let position = { x: 50, y: 42 };
+    const paint = () => {
+      title.style.setProperty('--glass-x', `${position.x}%`);
+      title.style.setProperty('--glass-y', `${position.y}%`);
+      frame = 0;
+    };
+    const move = event => {
+      if (!media.matches || event.pointerType === 'touch') return;
+      const bounds = title.getBoundingClientRect();
+      position = {
+        x: Math.max(0, Math.min(100, (event.clientX - bounds.left) / bounds.width * 100)),
+        y: Math.max(0, Math.min(100, (event.clientY - bounds.top) / bounds.height * 100)),
+      };
+      if (!frame) frame = requestAnimationFrame(paint);
+    };
+    const reset = () => {
+      cancelAnimationFrame(frame);
+      frame = 0;
+      position = { x: 50, y: 42 };
+      paint();
+    };
+    title.addEventListener('pointermove', move);
+    title.addEventListener('pointerleave', reset);
+    title.addEventListener('pointercancel', reset);
+    media.addEventListener('change', reset);
+    return () => {
+      cancelAnimationFrame(frame);
+      title.removeEventListener('pointermove', move);
+      title.removeEventListener('pointerleave', reset);
+      title.removeEventListener('pointercancel', reset);
+      media.removeEventListener('change', reset);
+    };
+  }, []);
 
   useEffect(() => {
     if (!window.location.hash) return;
@@ -145,7 +184,6 @@ export function App() {
           scrollTrigger: { trigger: element, start: 'top 94%', once: true },
         });
       }
-      gsap.fromTo('.footer-curve', { height: 90 }, { height: 12, ease: 'none', scrollTrigger: { trigger: 'footer', start: 'top bottom', end: 'top 20%', scrub: 1 } });
       if (matchMedia('(pointer:fine)').matches) {
         for (const item of root.current.querySelectorAll('.menu-button')) {
           const move = e => { const b = item.getBoundingClientRect(); gsap.to(item, { x: (e.clientX - b.left - b.width / 2) * .12, y: (e.clientY - b.top - b.height / 2) * .12, duration: .5, overwrite: 'auto' }); };
@@ -212,9 +250,17 @@ export function App() {
         </a>
       </article>)}</div>
     </section>
-    <footer id="contato"><div className="footer-curve"/><div className="content contact">
-      <div className="contact-heading"><h2 data-reveal>Vamos tirar sua<br/>ideia do papel.</h2><a className="contact-circle" href="https://wa.me/5575999312633" target="_blank" rel="noreferrer">Vamos conversar <ArrowUpRight size={20} aria-hidden="true"/></a></div>
-      <div className="contact-links" data-reveal><a href="mailto:emersonbrandao058@gmail.com">emersonbrandao058@gmail.com <ArrowUpRight size={18} aria-hidden="true"/></a><a href="https://wa.me/5575999312633" target="_blank" rel="noreferrer">(75) 99931-2633 <ArrowUpRight size={18} aria-hidden="true"/></a><a href={assetUrl("/curriculo-emerson-brandao.pdf")} download="Curriculo-Emerson-Brandao.pdf">Baixar currículo <Download size={18} aria-hidden="true"/></a></div>
-      <SocialButtons/><div className="footer-bottom"><span>© 2026 Emerson Brandão</span><span>Feira de Santana · Bahia</span><a href="https://github.com/emersonbrandao058-dot" target="_blank" rel="noreferrer">GitHub <ArrowUpRight size={16} aria-hidden="true"/></a></div></div></footer>
+    <footer id="contato" className="contact-footer"><div className="content contact">
+      <div className="contact-main">
+        <p className="contact-label">Contato</p>
+        <h2 ref={glassTitle} className="contact-glass" data-text="Vamos conversar.">Vamos conversar.</h2>
+        <a className="contact-email" href="mailto:emersonbrandao058@gmail.com"><span>emersonbrandao058@gmail.com</span><ArrowUpRight size={28} strokeWidth={1.3} aria-hidden="true"/></a>
+        <div className="contact-actions">
+          <a href="https://wa.me/5575999312633" target="_blank" rel="noreferrer">WhatsApp <ArrowUpRight size={18} aria-hidden="true"/></a>
+          <a href={assetUrl('/curriculo-emerson-brandao.pdf')} download="Curriculo-Emerson-Brandao.pdf">Baixar currículo <ArrowDown size={18} aria-hidden="true"/></a>
+        </div>
+      </div>
+      <div className="contact-colophon"><SocialButtons/><div className="contact-credit"><span>© 2026 Emerson Brandão</span><span>Feira de Santana · Bahia</span></div></div>
+    </div></footer>
   </main>;
 }
