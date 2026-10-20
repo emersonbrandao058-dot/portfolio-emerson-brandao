@@ -212,10 +212,6 @@ export function App() {
         </a>
       </article>)}</div>
     </section>
-    <section className="experience content experience-editorial" id="experiencia">
-      <div data-reveal><h2>Design na rotina.<br/>Organização<br/>na operação.</h2><p className="experience-note">A prática do e-commerce faz parte do meu jeito de pensar e construir para a web.</p></div>
-      <article className="employment" data-reveal><div className="employment-heading"><span className="employment-status">Atualmente</span><h3>Armazém dos Cosméticos</h3><p>Auxiliar de e-commerce júnior</p></div><ul><li>Criação de banners e peças visuais para o e-commerce.</li><li>Cadastro de produtos e organização do conteúdo e da apresentação do site.</li><li>Rotinas no Bling e preparação de campanhas de e-mail no RD Marketing.</li></ul><div className="skills" aria-label="Ferramentas e atuação"><span>E-commerce</span><span>Canva</span><span>Figma</span><span>Bling</span><span>RD Marketing</span></div></article>
-    </section>
     <footer id="contato"><div className="footer-curve"/><div className="content contact">
       <div className="contact-heading"><h2 data-reveal>Vamos tirar sua<br/>ideia do papel.</h2><a className="contact-circle" href="https://wa.me/5575999312633" target="_blank" rel="noreferrer">Vamos conversar <ArrowUpRight size={20} aria-hidden="true"/></a></div>
       <div className="contact-links" data-reveal><a href="mailto:emersonbrandao058@gmail.com">emersonbrandao058@gmail.com <ArrowUpRight size={18} aria-hidden="true"/></a><a href="https://wa.me/5575999312633" target="_blank" rel="noreferrer">(75) 99931-2633 <ArrowUpRight size={18} aria-hidden="true"/></a><a href={assetUrl("/curriculo-emerson-brandao.pdf")} download="Curriculo-Emerson-Brandao.pdf">Baixar currículo <Download size={18} aria-hidden="true"/></a></div>
