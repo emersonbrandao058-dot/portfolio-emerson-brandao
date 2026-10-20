@@ -24,10 +24,10 @@ function PortraitColorReveal() {
     const overlay = canvas.current;
     const context = overlay.getContext('2d');
     if (!context) return;
-    const motion = gsap.matchMedia();
-    motion.add('(prefers-reduced-motion: no-preference)', () => {
-      let trigger;
-      let disposed = false;
+    const interaction = gsap.matchMedia();
+    interaction.add('(pointer: fine) and (hover: hover)', () => {
+      const area = image.parentElement;
+      let pointer = null;
       let width = 0, height = 0, dpr = 1;
       let drawWidth = 0, drawHeight = 0, x = 0, y = 0;
 
@@ -35,18 +35,16 @@ function PortraitColorReveal() {
         if (!width || !height || !image.naturalWidth) return;
         context.setTransform(dpr, 0, 0, dpr, 0, 0);
         context.clearRect(0, 0, width, height);
-        const progress = trigger?.progress ?? 0;
-        if (progress <= 0 || progress >= 1) return;
+        if (!pointer) return;
         // Match object-fit: contain and the image's responsive object-position.
         context.globalCompositeOperation = 'source-over';
         context.drawImage(image, x, y, drawWidth, drawHeight);
-        const band = drawHeight * .26;
-        const center = y - band / 2 + progress * (drawHeight + band);
-        const feather = context.createLinearGradient(0, center - band / 2, 0, center + band / 2);
-        feather.addColorStop(0, 'transparent');
-        feather.addColorStop(.35, '#000');
-        feather.addColorStop(.65, '#000');
-        feather.addColorStop(1, 'transparent');
+        const radius = Math.min(130, drawWidth * .3);
+        const feather = context.createRadialGradient(pointer.x, pointer.y, 0, pointer.x, pointer.y, radius);
+        feather.addColorStop(0, '#000');
+        feather.addColorStop(.3, '#000');
+        feather.addColorStop(.65, 'rgba(0,0,0,.5)');
+        feather.addColorStop(1, 'rgba(0,0,0,0)');
         context.globalCompositeOperation = 'destination-in';
         context.fillStyle = feather;
         context.fillRect(0, 0, width, height);
@@ -54,11 +52,14 @@ function PortraitColorReveal() {
       };
 
       const measure = () => {
-        width = image.clientWidth;
-        height = image.clientHeight;
+        pointer = null;
+        const bounds = image.getBoundingClientRect();
+        width = bounds.width;
+        height = bounds.height;
         dpr = Math.min(window.devicePixelRatio || 1, 2);
         overlay.width = Math.round(width * dpr);
         overlay.height = Math.round(height * dpr);
+        if (!image.naturalWidth) return;
         const scale = Math.min(width / image.naturalWidth, height / image.naturalHeight);
         drawWidth = image.naturalWidth * scale;
         drawHeight = image.naturalHeight * scale;
@@ -68,35 +69,34 @@ function PortraitColorReveal() {
         draw();
       };
 
-      const ready = () => {
-        if (disposed || trigger || !image.naturalWidth) return;
-        measure();
-        trigger = ScrollTrigger.create({
-          trigger: image.closest('.portrait-hero'),
-          start: 'top top',
-          end: () => `+=${Math.max(1, drawHeight * .65)}`,
-          onUpdate: draw,
-          onRefresh: measure,
-        });
-        observer.observe(image);
+      const move = event => {
+        if (event.pointerType === 'touch') return;
+        const bounds = overlay.getBoundingClientRect();
+        pointer = { x: (event.clientX - bounds.left) * width / bounds.width, y: (event.clientY - bounds.top) * height / bounds.height };
         draw();
       };
-      const observer = new ResizeObserver(() => {
-        measure();
-        trigger?.refresh();
-      });
-      image.addEventListener('load', ready);
-      if (image.complete) ready();
+      const leave = () => { pointer = null; draw(); };
+      const observer = new ResizeObserver(measure);
+      observer.observe(image);
+      image.addEventListener('load', measure);
+      window.addEventListener('resize', measure);
+      area.addEventListener('pointerenter', move);
+      area.addEventListener('pointermove', move);
+      area.addEventListener('pointerleave', leave);
+      area.addEventListener('pointercancel', leave);
+      measure();
       return () => {
-        disposed = true;
-        image.removeEventListener('load', ready);
+        image.removeEventListener('load', measure);
+        window.removeEventListener('resize', measure);
+        area.removeEventListener('pointerenter', move);
+        area.removeEventListener('pointermove', move);
+        area.removeEventListener('pointerleave', leave);
+        area.removeEventListener('pointercancel', leave);
         observer.disconnect();
-        trigger?.kill();
-        context.clearRect(0, 0, overlay.width, overlay.height);
         overlay.width = overlay.height = 0;
       };
     });
-    return () => motion.revert();
+    return () => interaction.revert();
   }, []);
 
   return <div className="portrait-photo">
