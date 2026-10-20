@@ -48,13 +48,11 @@ a, button { -webkit-tap-highlight-color:transparent; }
 .hero-bottom a:hover { color:var(--ink); }
 
 /* A shared vertical rhythm between the existing sections. */
-.intro { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); align-items:start; gap:56px; padding-block:var(--section-space); }
-.intro h2 { font-size:clamp(37px,4vw,54px); font-weight:400; letter-spacing:-.04em; line-height:1.15; margin:0; }
+.intro { display:grid; grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr); align-items:center; gap:clamp(40px,4.5vw,64px); padding-top:clamp(72px,8vw,112px); padding-bottom:clamp(48px,5vw,72px); }
+.intro h2 { font-size:clamp(48px,4.8vw,64px); font-weight:400; letter-spacing:-.04em; line-height:1.12; margin:0; }
 .intro-copy { min-width:0; padding-top:0; font-size:17px; line-height:1.75; }
+.intro .intro-copy>.text-link { margin-top:24px; width:fit-content; }
 .text-link { font-size:16px; padding-block:5px 9px; }
-.tech-stack.content { padding-bottom:var(--section-space); }
-.stack-heading p { font-size:15px; }
-.stack-pause { font-size:14px; min-height:44px; }
 .work.content { padding-bottom:var(--section-space); }
 .section-title { display:flex; align-items:center; gap:16px; font-size:clamp(30px,3.5vw,44px); font-weight:400; letter-spacing:-.035em; margin:0 0 32px; }
 .section-title>span { color:var(--muted); font-family:'DM Sans',sans-serif; font-size:14px; font-variant-numeric:tabular-nums; }
@@ -124,8 +122,9 @@ footer { padding-top:var(--section-space); }
   .portrait-hero .topbar { padding-block:24px; min-height:80px; font-size:14px; }
 
   .intro, .experience-editorial { grid-template-columns:1fr; gap:36px; }
-  .intro-copy { max-width:650px; }
-  .intro h2 { font-size:42px; }
+  .intro { align-items:start; gap:32px; padding-top:72px; padding-bottom:48px; }
+  .intro-copy { max-width:none; }
+  .intro h2 { font-size:clamp(44px,7.3vw,56px); }
   .project-card-link { grid-template-columns:1fr; gap:28px; padding-block:32px; }
   .project-cover { aspect-ratio:16/9; }
   .project-details { padding-right:0; }
@@ -138,10 +137,8 @@ footer { padding-top:var(--section-space); }
   .contact-circle { flex-basis:144px; width:144px; height:144px; }
 }
 @media(max-width:700px) {
-  .intro h2 { font-size:39px; }
+  .intro { padding-top:64px; padding-bottom:44px; }
   .section-title { font-size:30px; margin-bottom:24px; }
-  .stack-heading p { font-size:14px; }
-  .stack-pause { min-width:44px; }
   .experience-editorial h2 { font-size:38px; }
   .contact-heading { align-items:flex-start; flex-direction:column; gap:30px; margin-bottom:32px; }
   .contact h2 { font-size:clamp(42px,10vw,66px); }
