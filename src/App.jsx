@@ -12,7 +12,7 @@ gsap.registerPlugin(ScrollTrigger);
 const projects = [
   { name: 'UltraEnergy', description: 'Site institucional para uma empresa de energia solar, com apresentação de serviços e demonstração de monitoramento.', url: 'https://ultraenergy.vercel.app/', cover: assetUrl('/assets/ultraenergy-preview.webp'), technologies: ['HTML', 'CSS', 'JavaScript'] },
   { name: 'JJ Style', description: 'Catálogo de moda masculina com navegação por produtos e contato direto pelo WhatsApp.', url: 'https://jj-style.vercel.app/', cover: assetUrl('/assets/jjstyle-preview.webp'), technologies: ['HTML', 'CSS', 'Bootstrap'] },
-  { name: 'Bacelar Educa', description: 'Plataforma de reforço escolar com questões, listas e perfis de acesso. A versão pública está em preparação.', url: 'mailto:emersonbrandao058@gmail.com?subject=Apresenta%C3%A7%C3%A3o%20do%20Bacelar%20Educa', cover: assetUrl('/assets/bacelar-cover.svg'), technologies: ['Next.js', 'TypeScript', 'Supabase'], inProgress: true },
+  { name: 'Bacelar Educa', description: 'Plataforma de reforço escolar com questões, listas e perfis de acesso. A versão pública está em preparação.', url: 'https://wa.me/5575999312633?text=Ol%C3%A1%2C%20gostaria%20de%20solicitar%20uma%20apresenta%C3%A7%C3%A3o%20do%20Bacelar%20Educa.', cover: assetUrl('/assets/bacelar-cover.svg'), technologies: ['Next.js', 'TypeScript', 'Supabase'], inProgress: true },
 ];
 
 function PortraitColorReveal() {
@@ -243,7 +243,7 @@ export function App() {
     <section className="work content text-projects" id="projetos" tabIndex={-1}>
       <h2 className="section-title" data-reveal>Projetos selecionados<span>{String(projects.length).padStart(2, '0')}</span></h2>
       <div className="project-list">{projects.map(project => <article className="project-card" key={project.name} data-reveal>
-        <a className="project-card-link" href={project.url} target={project.inProgress ? undefined : '_blank'} rel={project.inProgress ? undefined : 'noreferrer'} aria-label={project.inProgress ? 'Solicitar apresentação de '+project.name : 'Visitar '+project.name}>
+        <a className="project-card-link" href={project.url} target="_blank" rel="noreferrer" aria-label={project.inProgress ? 'Solicitar apresentação de '+project.name : 'Visitar '+project.name}>
           <div className="project-cover"><img src={project.cover} alt={project.inProgress ? 'Capa do projeto Bacelar Educa' : 'Prévia do site '+project.name} width="1200" height="824" loading="lazy" decoding="async"/></div>
           <div className="project-details"><div className="project-title-line"><h3>{project.name}</h3>{project.inProgress && <span className="project-status">Em desenvolvimento</span>}</div>
             <p>{project.description}</p>
