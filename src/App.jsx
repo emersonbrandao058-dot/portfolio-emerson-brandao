@@ -257,13 +257,13 @@ export function App() {
       <div className="contact-main">
         <p className="contact-label">Contato</p>
         <h2 ref={glassTitle} className="contact-glass" data-text="Vamos conversar.">Vamos conversar.</h2>
-        <a className="contact-email" href="mailto:emersonbrandao058@gmail.com"><span>emersonbrandao058@gmail.com</span><ArrowUpRight size={28} strokeWidth={1.3} aria-hidden="true"/></a>
         <div className="contact-actions">
+          <a href="mailto:emersonbrandao058@gmail.com">Enviar e-mail <ArrowUpRight size={18} aria-hidden="true"/></a>
           <a href="https://wa.me/5575999312633" target="_blank" rel="noreferrer">WhatsApp <ArrowUpRight size={18} aria-hidden="true"/></a>
           <a href={assetUrl('/curriculo-emerson-brandao.pdf')} download="Curriculo-Emerson-Brandao.pdf">Baixar currículo <ArrowDown size={18} aria-hidden="true"/></a>
         </div>
       </div>
-      <div className="contact-colophon"><SocialButtons/><div className="contact-credit"><span>© 2026 Emerson Brandão</span><span>Feira de Santana · Bahia</span></div></div>
+      <div className="contact-colophon"><SocialButtons/><div className="contact-credit"><a className="contact-credit-email" href="mailto:emersonbrandao058@gmail.com">emersonbrandao058@gmail.com</a><span>© 2026 Emerson Brandão</span><span>Feira de Santana · Bahia</span></div></div>
     </div></footer>
     </div>
     <div ref={navigation} className={'global-navigation'+(showMenu||menu?' has-menu':'')+(menu?' is-open':'')} role={menu?'dialog':undefined} aria-modal={menu?true:undefined} aria-label={menu?'Navegação':undefined}>

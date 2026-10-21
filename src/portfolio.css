@@ -168,18 +168,15 @@ html[data-theme='light'] .portrait-hero .hero-project-link:is(:hover,:focus-visi
   .contact h2.contact-glass { color:transparent; background:linear-gradient(174deg,#f1f2f3 12%,#c7cbd1 39%,#7d8491 48%,#c7cbd0 52%,#e6e8eb 72%,#a3a8b1 100%); background-clip:text; -webkit-background-clip:text; -webkit-text-stroke:.45px #d9dfe34d; filter:drop-shadow(0 2px 1px #0006); }
   .contact-glass::after { content:attr(data-text); position:absolute; inset:0; pointer-events:none; color:transparent; background:radial-gradient(ellipse 24% 115% at var(--glass-x) var(--glass-y),#fff 0%,#f4f8ffe6 15%,#b5c8e28c 35%,#c4bde13d 55%,transparent 80%); background-clip:text; -webkit-background-clip:text; -webkit-text-stroke:.35px #edf2ff24; }
 }
-.contact-email { display:inline-flex; align-items:center; justify-content:center; gap:14px; max-width:100%; min-height:56px; padding-block:6px; font-size:clamp(22px,2.8vw,40px); line-height:1.4; letter-spacing:-.025em; color:var(--ink); }
-.contact-email span { min-width:0; overflow-wrap:anywhere; text-decoration:underline; text-decoration-color:var(--control-border,var(--line)); text-decoration-thickness:1px; text-underline-offset:.24em; transition:text-decoration-color .25s; }
-.contact-email svg { flex-shrink:0; width:clamp(20px,2vw,28px); transition:transform .25s; }
-.contact-email:is(:hover,:focus-visible) span { text-decoration-color:currentColor; }
-.contact-email:is(:hover,:focus-visible) svg { transform:translate(3px,-3px); }
-.contact-actions { display:flex; flex-wrap:wrap; justify-content:center; gap:14px 36px; margin-top:28px; }
-.contact-actions a { display:inline-flex; align-items:center; gap:12px; min-height:44px; padding-block:8px; border-bottom:1px solid var(--line); font-size:15px; color:var(--muted); transition:color .25s,border-color .25s; }
+.contact-actions { display:flex; flex-wrap:wrap; justify-content:center; gap:14px 64px; }
+.contact-actions a { display:inline-flex; align-items:center; gap:12px; min-height:44px; padding-block:8px; border-bottom:1px solid var(--line); font-size:20px; color:var(--muted); transition:color .25s,border-color .25s; }
 .contact-actions a svg { transition:transform .25s; }
 .contact-actions a:is(:hover,:focus-visible) { color:var(--ink); border-color:currentColor; }
 .contact-actions a:is(:hover,:focus-visible) svg { transform:translateY(-2px); }
 .contact-colophon { display:flex; align-items:center; justify-content:space-between; gap:32px; border-top:1px solid var(--line); padding-block:32px 36px; }
 .contact-credit { display:flex; flex-direction:column; gap:6px; text-align:right; color:var(--muted); font-size:13px; line-height:1.6; }
+.contact-credit-email { color:inherit; overflow-wrap:anywhere; }
+.contact-credit-email:is(:hover,:focus-visible) { text-decoration:underline; text-underline-offset:.24em; }
 .contact-credit span:last-child { color:var(--quiet); }
 .contact-footer a:focus-visible { outline:2px solid var(--ink); outline-offset:6px; }
 html[data-theme='light'] .contact h2.contact-glass { color:var(--ink); filter:none; }
@@ -191,15 +188,14 @@ html[data-theme='light'] .contact h2.contact-glass { color:var(--ink); filter:no
   .contact-main { padding:54px 0 60px; }
   .contact-label { margin-bottom:30px; font-size:11px; }
   .contact h2.contact-glass { margin-bottom:24px; font-size:clamp(36px,10vw,64px); }
-  .contact-email { gap:8px; font-size:clamp(19px,5.1vw,28px); line-height:1.5; text-align:left; }
-  .contact-actions { gap:12px 26px; margin-top:20px; }
+  .contact-actions { flex-direction:column; align-items:center; gap:12px; }
   .contact-actions a { font-size:14px; }
   .contact-colophon { flex-direction:column; align-items:flex-start; gap:28px; padding-block:28px 32px; }
   .contact-credit { text-align:left; font-size:12px; }
 }
 @media(prefers-reduced-motion:reduce) {
   .contact h2.contact-glass { transition:none; }
-  .contact-email svg,.contact-actions svg { transform:none!important; }
+  .contact-actions svg { transform:none!important; }
 }
 @media(forced-colors:active) {
   .contact h2.contact-glass { color:CanvasText; background:none; -webkit-text-stroke:0; filter:none; }
