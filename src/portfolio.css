@@ -169,10 +169,27 @@ html[data-theme='light'] .portrait-hero .hero-project-link:is(:hover,:focus-visi
   .contact-glass::after { content:attr(data-text); position:absolute; inset:0; pointer-events:none; color:transparent; background:radial-gradient(ellipse 24% 115% at var(--glass-x) var(--glass-y),#fff 0%,#f4f8ffe6 15%,#b5c8e28c 35%,#c4bde13d 55%,transparent 80%); background-clip:text; -webkit-background-clip:text; -webkit-text-stroke:.35px #edf2ff24; }
 }
 .contact-actions { display:flex; flex-wrap:wrap; justify-content:center; gap:14px 64px; }
-.contact-actions a { display:inline-flex; align-items:center; gap:12px; min-height:44px; padding-block:8px; border-bottom:1px solid var(--line); font-size:20px; color:var(--muted); transition:color .25s,border-color .25s; }
-.contact-actions a svg { transition:transform .25s; }
-.contact-actions a:is(:hover,:focus-visible) { color:var(--ink); border-color:currentColor; }
-.contact-actions a:is(:hover,:focus-visible) svg { transform:translateY(-2px); }
+/* E5D: contact feedback only; preserve the approved action geometry. */
+.contact-actions a { position:relative; display:inline-flex; align-items:center; gap:12px; min-height:44px; padding-block:8px; border-bottom:1px solid var(--line); font-size:20px; color:var(--muted); transition:color .22s; }
+.contact-actions a::after { content:''; position:absolute; inset:auto 0 -1px; height:1px; pointer-events:none; background:linear-gradient(90deg,var(--muted),var(--ink) 55%,var(--muted)); opacity:0; transform:scaleX(0); transform-origin:left; transition:transform .38s cubic-bezier(.16,1,.3,1),opacity .22s; }
+.contact-actions a svg { color:currentColor; transition:transform .22s cubic-bezier(.16,1,.3,1); }
+.contact-actions a:focus-visible { color:var(--ink); }
+.contact-actions a:focus-visible::after { opacity:.85; transform:scaleX(1); }
+.contact-actions a:focus-visible svg { transform:translate(3px,-3px); }
+.contact-actions a[download]:focus-visible svg { transform:translateY(3px); }
+@media(hover:hover) and (pointer:fine) {
+  .contact-actions a:hover { color:var(--ink); }
+  .contact-actions a:hover::after { opacity:.85; transform:scaleX(1); }
+  .contact-actions a:hover svg { transform:translate(3px,-3px); }
+  .contact-actions a[download]:hover svg { transform:translateY(3px); }
+}
+@supports ((background-clip:text) or (-webkit-background-clip:text)) {
+  .contact-actions a { background-image:linear-gradient(105deg,color-mix(in srgb,var(--ink) 86%,var(--muted)) 40%,var(--ink) 50%,color-mix(in srgb,var(--ink) 86%,var(--muted)) 60%); background-size:250% 100%; background-position:100% 0; background-clip:text; -webkit-background-clip:text; transition:color .22s,background-position .38s cubic-bezier(.16,1,.3,1); }
+  .contact-actions a:focus-visible { -webkit-text-fill-color:transparent; background-position:0 0; }
+  @media(hover:hover) and (pointer:fine) {
+    .contact-actions a:hover { -webkit-text-fill-color:transparent; background-position:0 0; }
+  }
+}
 .contact-colophon { display:flex; align-items:center; justify-content:space-between; gap:32px; border-top:1px solid var(--line); padding-block:32px 36px; }
 .contact-credit { display:flex; flex-direction:column; gap:6px; text-align:right; color:var(--muted); font-size:13px; line-height:1.6; }
 .contact-credit-email { color:inherit; overflow-wrap:anywhere; }
@@ -195,9 +212,14 @@ html[data-theme='light'] .contact h2.contact-glass { color:var(--ink); filter:no
 }
 @media(prefers-reduced-motion:reduce) {
   .contact h2.contact-glass { transition:none; }
+  .contact-actions a, .contact-actions a:is(:hover,:focus-visible) { transition:none; background:none; -webkit-text-fill-color:currentColor; }
+  .contact-actions a::after { transition:none; }
   .contact-actions svg { transform:none!important; }
+  .contact-actions a svg { transition:none; }
 }
 @media(forced-colors:active) {
+  .contact-actions a, .contact-actions a:is(:hover,:focus-visible) { background:none; -webkit-text-fill-color:currentColor; }
+  .contact-actions a::after { background:currentColor; }
   .contact h2.contact-glass { color:CanvasText; background:none; -webkit-text-stroke:0; filter:none; }
   .contact-glass::after { display:none; }
 }
