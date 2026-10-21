@@ -208,3 +208,45 @@ html[data-theme='light'] .contact h2.contact-glass { color:var(--ink); filter:no
 /* Align only the initial theme control with the Hero's wider content rail. */
 .theme-switcher:not(.with-menu) { right:max(clamp(24px,5vw,72px),calc((100vw - 1440px)/2 + 72px)); top:23px; }
 @media(max-width:800px) { .theme-switcher:not(.with-menu){top:18px} }
+
+/* E5B: compact controls; the small-screen navigation has its own opaque band. */
+html { scrollbar-gutter:stable; scroll-padding-top:96px; }
+.global-navigation { position:fixed; inset:0; z-index:30; pointer-events:none; }
+.navigation-dock { position:absolute; top:max(20px,env(safe-area-inset-top)); right:max(24px,env(safe-area-inset-right)); display:flex; gap:4px; padding:3px; border:1px solid var(--line); border-radius:28px; background:var(--canvas); pointer-events:auto; }
+.navigation-dock .theme-switcher, .navigation-dock .menu-button { position:relative; inset:auto; display:grid; place-items:center; flex:none; width:44px; height:44px; padding:0; border:0; border-radius:50%; box-shadow:none; background:transparent; color:var(--ink); scale:1; transition:opacity .18s,transform .18s,background-color .18s; }
+.navigation-dock .menu-button { position:absolute; right:3px; opacity:0; visibility:hidden; transform:translateY(-4px); pointer-events:none; }
+.has-menu .navigation-dock .menu-button { position:relative; right:auto; opacity:1; visibility:visible; transform:none; pointer-events:auto; }
+.navigation-dock button:is(:hover,:focus-visible) { background:var(--surface-hover); }
+.navigation-dock button:active { background:var(--surface); }
+.navigation-dock button:focus-visible { outline:2px solid var(--ink); outline-offset:2px; }
+html[data-theme='light'] .navigation-dock .menu-button { background:transparent; color:var(--ink); box-shadow:none; }
+html[data-theme='light'] .navigation-dock .menu-button:is(:hover,:focus-visible) { background:var(--surface-hover); }
+.global-navigation.is-open { pointer-events:auto; }
+.is-open .navigation-dock { z-index:20; }
+.global-navigation .menu-overlay { inset:0; width:100%; height:100dvh; padding:clamp(96px,12vh,128px) max(var(--page-gutter),calc((100vw - 760px)/2)) max(32px,env(safe-area-inset-bottom)); background:var(--canvas); color:var(--ink); box-shadow:none; overflow-y:auto; overscroll-behavior:contain; animation:navigation-in .18s ease-out; }
+.global-navigation .menu-overlay[hidden] { display:none; }
+.global-navigation .menu-overlay>p { margin:0; padding-bottom:20px; font-size:11px; line-height:1.5; letter-spacing:.14em; color:var(--quiet); border-bottom:1px solid var(--line); }
+.global-navigation .menu-overlay nav { margin:28px 0 40px; gap:0; }
+.global-navigation .menu-overlay nav a { align-items:center; gap:24px; min-height:64px; padding-block:6px; font-family:'Manrope',sans-serif; font-size:clamp(44px,6vw,80px); line-height:1.25; letter-spacing:-.035em; font-weight:400; transition:color .18s; }
+.global-navigation .menu-overlay nav a svg { flex-shrink:0; color:var(--quiet); transition:transform .18s,color .18s; }
+.global-navigation .menu-overlay nav a:is(:hover,:focus-visible) { transform:none; color:var(--ink); text-decoration:underline; text-decoration-thickness:1px; text-underline-offset:.14em; }
+.global-navigation .menu-overlay nav a:is(:hover,:focus-visible) svg { transform:translate(3px,-3px); color:var(--ink); }
+.global-navigation .menu-overlay>a { display:inline-flex; align-items:center; min-height:44px; font-size:clamp(13px,1.5vw,16px); color:var(--muted); border-bottom:1px solid var(--line); }
+.global-navigation .menu-overlay>a:is(:hover,:focus-visible) { color:var(--ink); border-color:currentColor; }
+.skip, .skip:focus { position:fixed; top:16px; left:16px; max-width:calc(100vw - 32px); z-index:50; padding:14px 18px; border:1px solid var(--control-border); border-radius:4px; background:var(--ink); color:var(--canvas); font-size:14px; line-height:1.4; transform:translateY(calc(-100% - 32px)); }
+.skip:focus-visible { transform:none; outline:2px solid var(--ink); outline-offset:3px; }
+@keyframes navigation-in { from { opacity:0; transform:translateY(-6px); } to { opacity:1; transform:none; } }
+@media(max-width:1360px) {
+  .global-navigation.has-menu:not(.is-open)::before { content:''; position:absolute; inset:0 0 auto; height:calc(72px + env(safe-area-inset-top)); background:var(--canvas); border-bottom:1px solid var(--line); }
+  .navigation-dock { top:calc(10px + env(safe-area-inset-top)); right:max(16px,env(safe-area-inset-right)); }
+}
+@media(max-width:700px) {
+  .global-navigation .menu-overlay { padding-top:104px; }
+  .global-navigation .menu-overlay nav { margin:24px 0 36px; }
+  .global-navigation .menu-overlay nav a { font-size:clamp(40px,11vw,56px); min-height:70px; }
+}
+@media(prefers-reduced-motion:reduce) {
+  .global-navigation .menu-overlay { animation:none; }
+  .navigation-dock button, .global-navigation .menu-overlay nav a svg { transition:none; }
+  .global-navigation .menu-overlay nav a:is(:hover,:focus-visible) svg { transform:none; }
+}

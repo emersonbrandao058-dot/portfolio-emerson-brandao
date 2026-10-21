@@ -110,8 +110,12 @@ export function App() {
   const [showMenu, setShowMenu] = useState(false);
   const root = useRef(null);
   const menuButton = useRef(null);
+  const navigation = useRef(null);
   const glassTitle = useRef(null);
-  const close = () => setMenu(false);
+  const close = () => {
+    setMenu(false);
+    menuButton.current?.focus({ preventScroll: true });
+  };
 
   useEffect(() => {
     const title = glassTitle.current;
@@ -162,7 +166,7 @@ export function App() {
 
   useEffect(() => {
     const hero = root.current.querySelector('#inicio');
-    const update = () => setShowMenu(hero.getBoundingClientRect().bottom <= 96);
+    const update = () => setShowMenu(hero.getBoundingClientRect().bottom <= 0);
     update();
     window.addEventListener('scroll', update, { passive: true });
     window.addEventListener('resize', update);
@@ -170,9 +174,14 @@ export function App() {
   }, []);
 
   useEffect(() => {
+    if (!showMenu && !menu && document.activeElement === menuButton.current) {
+      navigation.current.querySelector('.theme-switcher')?.focus({ preventScroll: true });
+    }
+  }, [showMenu, menu]);
+
+  useEffect(() => {
     const motion = gsap.matchMedia();
     motion.add('(prefers-reduced-motion: no-preference)', () => {
-      const cleanup = [];
       const ctx = gsap.context(() => {
       // Each element has one opacity owner. Scroll never fades the opening copy.
       gsap.fromTo('.hero-copy-reveal,.portrait-name,.topbar,.portrait-photo',
@@ -184,37 +193,34 @@ export function App() {
           scrollTrigger: { trigger: element, start: 'top 94%', once: true },
         });
       }
-      if (matchMedia('(pointer:fine)').matches) {
-        for (const item of root.current.querySelectorAll('.menu-button')) {
-          const move = e => { const b = item.getBoundingClientRect(); gsap.to(item, { x: (e.clientX - b.left - b.width / 2) * .12, y: (e.clientY - b.top - b.height / 2) * .12, duration: .5, overwrite: 'auto' }); };
-          const leave = () => gsap.to(item, { x: 0, y: 0, duration: .7, ease: 'elastic.out(1,.5)', overwrite: 'auto' });
-          item.addEventListener('pointermove', move); item.addEventListener('pointerleave', leave);
-          cleanup.push(() => { item.removeEventListener('pointermove', move); item.removeEventListener('pointerleave', leave); });
-        }
-      }
     }, root);
-      return () => { cleanup.forEach(fn => fn()); ctx.revert(); };
+      return () => ctx.revert();
     });
     return () => motion.revert();
   }, []);
 
   useEffect(() => {
+    if (!menu) return;
+    const previousOverflow = document.body.style.overflow;
+    navigation.current.querySelector('.menu-overlay a')?.focus({ preventScroll: true });
     const handler = e => {
-      if (e.key === 'Escape' && menu) { close(); menuButton.current?.focus(); }
-      if (e.key === 'Tab' && menu) {
-        const items = [menuButton.current, root.current.querySelector('.theme-switcher'), ...root.current.querySelectorAll('.menu-overlay a')].filter(Boolean);
+      if (e.key === 'Escape') { e.preventDefault(); close(); }
+      if (e.key === 'Tab') {
+        const items = [...navigation.current.querySelectorAll('button, .menu-overlay a')];
         const first = items[0], last = items.at(-1);
-        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+        if (!navigation.current.contains(document.activeElement)) { e.preventDefault(); first.focus(); }
+        else if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
         else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
       }
     };
     document.addEventListener('keydown', handler);
-    document.body.style.overflow = menu ? 'hidden' : '';
-    return () => { document.removeEventListener('keydown', handler); document.body.style.overflow = ''; };
+    document.body.style.overflow = 'hidden';
+    return () => { document.removeEventListener('keydown', handler); document.body.style.overflow = previousOverflow; };
   }, [menu]);
 
   return <main ref={root}>
-    <a className="skip" href="#projetos">Pular para projetos</a>
+    <div className="page-content" inert={menu}>
+    <a className="skip" href="#projetos" onClick={() => document.getElementById('projetos')?.focus({ preventScroll: true })}>Pular para projetos</a>
     <section className="hero portrait-hero" id="inicio" aria-label="Apresentação">
       <header className="topbar content">
         <a href="#inicio">Emerson Brandão<span className="brand-dot">.</span></a>
@@ -229,15 +235,12 @@ export function App() {
       </div></div></div>
       <div className="hero-bottom content"><a href="#sobre"><ArrowDown size={16} aria-hidden="true"/> Explore o portfólio</a><span>Feira de Santana · Bahia</span><a href={assetUrl("/curriculo.html")} target="_blank" rel="noreferrer">Ver currículo <ArrowUpRight size={16} aria-hidden="true"/></a></div>
     </section>
-    <button ref={menuButton} className={'menu-button '+((showMenu||menu)?'is-visible ':'')+(menu?'active':'')} aria-hidden={!(showMenu||menu)} tabIndex={(showMenu||menu)?0:-1} aria-expanded={menu} aria-controls="site-menu" aria-label={menu?'Fechar menu':'Abrir menu'} onClick={()=>setMenu(!menu)}>{menu?<X size={24} strokeWidth={1.2}/>:<Menu size={24} strokeWidth={1.2}/>}</button>
-    <AnimatedThemeToggler className={'theme-switcher '+((showMenu||menu)?'with-menu':'')} duration={450}/>
-    {menu&&<div className="menu-overlay" id="site-menu"><p>NAVEGAÇÃO</p><nav aria-label="Menu da página">{[['Início','inicio'],['Projetos','projetos'],['Sobre','sobre'],['Contato','contato']].map(([label,id])=><a key={id} onClick={close} href={'#'+id}>{label}<ArrowUpRight size={25} aria-hidden="true"/></a>)}</nav><a href="mailto:emersonbrandao058@gmail.com">emersonbrandao058@gmail.com</a></div>}
     <section className="intro content" id="sobre">
       <h2 data-reveal>Entre o visual<br/>e o funcional.</h2>
       <div className="intro-copy"><AboutTerminal/><a className="text-link" href={assetUrl("/curriculo.html")} target="_blank" rel="noreferrer">Conheça minha trajetória <ArrowUpRight size={16} aria-hidden="true"/></a></div>
     </section>
     <TechStack/>
-    <section className="work content text-projects" id="projetos">
+    <section className="work content text-projects" id="projetos" tabIndex={-1}>
       <h2 className="section-title" data-reveal>Projetos selecionados<span>{String(projects.length).padStart(2, '0')}</span></h2>
       <div className="project-list">{projects.map(project => <article className="project-card" key={project.name} data-reveal>
         <a className="project-card-link" href={project.url} target={project.inProgress ? undefined : '_blank'} rel={project.inProgress ? undefined : 'noreferrer'} aria-label={project.inProgress ? 'Solicitar apresentação de '+project.name : 'Visitar '+project.name}>
@@ -262,5 +265,15 @@ export function App() {
       </div>
       <div className="contact-colophon"><SocialButtons/><div className="contact-credit"><span>© 2026 Emerson Brandão</span><span>Feira de Santana · Bahia</span></div></div>
     </div></footer>
+    </div>
+    <div ref={navigation} className={'global-navigation'+(showMenu||menu?' has-menu':'')+(menu?' is-open':'')} role={menu?'dialog':undefined} aria-modal={menu?true:undefined} aria-label={menu?'Navegação':undefined}>
+      <div className="navigation-dock">
+        <AnimatedThemeToggler className="theme-switcher" duration={250}/>
+        <button type="button" ref={menuButton} className={'menu-button '+((showMenu||menu)?'is-visible ':'')+(menu?'active':'')} aria-hidden={!(showMenu||menu)} tabIndex={(showMenu||menu)?0:-1} aria-expanded={menu} aria-controls="site-menu" aria-label={menu?'Fechar menu':'Abrir menu'} onClick={()=>menu?close():setMenu(true)}>{menu?<X size={22} strokeWidth={1.5}/>:<Menu size={22} strokeWidth={1.5}/>}</button>
+      </div>
+      <div className="menu-overlay" id="site-menu" hidden={!menu}>
+        <p>NAVEGAÇÃO</p><nav aria-label="Menu da página">{[['Início','inicio'],['Projetos','projetos'],['Sobre','sobre'],['Contato','contato']].map(([label,id])=><a key={id} onClick={close} href={'#'+id}>{label}<ArrowUpRight size={25} aria-hidden="true"/></a>)}</nav><a href="mailto:emersonbrandao058@gmail.com">emersonbrandao058@gmail.com</a>
+      </div>
+    </div>
   </main>;
 }
