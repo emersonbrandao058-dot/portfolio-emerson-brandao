@@ -1,0 +1,188 @@
+/* About. One held stage in the hero's black, white and red: Nox, the avatar, plays through the
+   reader's scroll while the words beside him change, from the statement to the path to the tools.
+   Like the hero, the projects and the services, it ignores the light/dark theme. */
+.ab {
+  --ab-ink:#f5f5f5; --ab-muted:#b4b4b0; --ab-quiet:#8a8a85; --ab-red:#f2161f; --ab-red-lit:#ff4a50;
+  --ab-line:rgba(255,255,255,.13);
+  --ab-gutter:clamp(20px,5vw,72px);
+  /* Matches the services' corner radius: the section starts under their rounded edge. */
+  --ab-tuck:clamp(28px,4vw,56px);
+  --ab-display:'Manrope','DM Sans',sans-serif;
+  --ab-mono:'JetBrains Mono','Cascadia Code',ui-monospace,Consolas,monospace;
+  --ab-ease:cubic-bezier(.2,.8,.2,1);
+  position:relative; z-index:1; isolation:isolate;
+  margin-top:calc(var(--ab-tuck) * -1);
+  padding-top:calc(var(--ab-tuck) + clamp(64px,7vw,120px));
+  background:#000; color:var(--ab-ink); color-scheme:dark;
+}
+.ab:focus { outline:none; }
+.ab ::selection { background:var(--ab-red); color:#fff; }
+.ab :is(a,button):focus-visible { outline:2px solid #fff; outline-offset:4px; }
+.ab-wrap { width:100%; max-width:1440px; margin-inline:auto; padding-inline:var(--ab-gutter); }
+.ab-mono { font-family:var(--ab-mono); font-size:12px; font-weight:500; line-height:1.4; letter-spacing:.04em; text-transform:uppercase; }
+.ab-rule { display:block; height:1px; background:var(--ab-line); transform-origin:0 50%; pointer-events:none; }
+
+/* Running head: three facts set like a magazine folio, over a hairline. */
+.ab-meta { position:relative; display:grid; grid-template-columns:1fr auto 1fr; align-items:end; gap:16px; padding-bottom:18px; color:var(--ab-quiet); }
+.ab-meta>span:first-child { color:var(--ab-ink); display:inline-flex; align-items:center; gap:10px; }
+.ab-meta>span:first-child::before { content:''; width:7px; height:7px; border-radius:50%; background:var(--ab-red); }
+.ab-meta>span:last-of-type { justify-self:end; }
+.ab-meta>.ab-rule { position:absolute; inset:auto 0 0; }
+
+/* The runway. The take plays from when its top is 40% down the screen to when its foot is 75% down,
+   i.e. over (height - 35svh) of scroll: 260svh here, about 8px per frame step on desktop. */
+.ab-scene { position:relative; height:295svh; }
+.ab-stage { position:sticky; top:0; height:100svh; min-height:600px; overflow:hidden; }
+.ab-stage-in {
+  height:100%; display:grid; align-items:center;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr); grid-template-rows:minmax(0,1fr) auto;
+  column-gap:clamp(24px,4vw,64px);
+  padding-top:clamp(84px,11svh,120px); padding-bottom:clamp(28px,5svh,48px);
+}
+
+/* The words: three panels share one place and hand over to each other. */
+.ab-panels { grid-area:1/1; position:relative; z-index:2; display:grid; align-items:center; min-width:0; }
+.ab-panel { grid-area:1/1; min-width:0; pointer-events:none; }
+.ab-panel.is-current { pointer-events:auto; }
+.ab-kicker { display:flex; gap:12px; margin:0 0 clamp(16px,2svh,24px); color:var(--ab-quiet); }
+.ab-kicker span { color:var(--ab-red-lit); }
+
+/* 01-03: the statement. */
+.ab-title { margin:0; font:800 clamp(52px,6.3vw,108px)/.9 var(--ab-display); letter-spacing:-.055em; }
+.ab-line { display:block; padding-bottom:.06em; }
+.ab-line:nth-child(3) { margin-top:.2em; }
+.ab-line--red { color:var(--ab-red); }
+
+.ab-cue { display:flex; align-items:center; gap:16px; margin:clamp(24px,4svh,44px) 0 0; font:600 clamp(18px,1.6vw,26px)/1.25 var(--ab-display); letter-spacing:-.02em; }
+.ab-cue-mark { flex:none; width:clamp(28px,3vw,44px); height:2px; background:var(--ab-red); transform-origin:0 50%; }
+
+/* 04: the path. A ruled fact sheet, term on the left. */
+.ab-path, .ab-stack { max-width:36rem; }
+.ab-path-title, .ab-stack-title { margin:0; font:700 clamp(26px,2.5vw,40px)/1.08 var(--ab-display); letter-spacing:-.04em; text-wrap:balance; }
+.ab-facts { margin:clamp(20px,3.2svh,36px) 0 0; }
+.ab-fact { position:relative; display:grid; grid-template-columns:minmax(76px,7.5rem) minmax(0,1fr); gap:4px 18px; padding-block:clamp(12px,1.8svh,18px); }
+.ab-fact>.ab-rule { position:absolute; inset:0 0 auto; }
+.ab-fact dt { padding-top:.3em; color:var(--ab-quiet); }
+.ab-fact dd { display:flex; flex-direction:column; gap:2px; margin:0; }
+.ab-fact strong { font:600 clamp(15px,1.15vw,17px)/1.35 var(--ab-display); letter-spacing:-.01em; }
+.ab-fact dd span { font-size:14px; line-height:1.5; color:var(--ab-muted); }
+.ab-link { position:relative; display:inline-flex; align-items:center; gap:14px; min-height:44px; margin-top:clamp(12px,2svh,20px); padding-block:8px; border-bottom:1px solid rgba(255,255,255,.3); font:600 15px/1.2 var(--ab-display); }
+.ab-link::after { content:''; position:absolute; inset:auto 0 -1px; height:1px; background:var(--ab-red); transform:scaleX(0); transform-origin:0 50%; transition:transform .55s cubic-bezier(.7,0,.2,1); }
+.ab-link svg { color:var(--ab-red-lit); transition:transform .45s var(--ab-ease); }
+.ab-link:focus-visible::after { transform:scaleX(1); }
+.ab-link:focus-visible svg { transform:translate(3px,-3px); }
+@media(hover:hover) and (pointer:fine) {
+  .ab-link:hover::after { transform:scaleX(1); }
+  .ab-link:hover svg { transform:translate(3px,-3px); }
+}
+
+/* 05: the tools. One row of slots on a hairline, swapping on its own clock. */
+.ab-cloud-wrap { margin-top:clamp(24px,4svh,44px); }
+.ab-cloud { display:grid; grid-template-columns:repeat(var(--slots,4),minmax(0,1fr)); border-block:1px solid var(--ab-line); }
+.ab-slot { display:grid; place-items:center; min-height:clamp(104px,15svh,132px); }
+.ab-slot+.ab-slot { box-shadow:inset 1px 0 0 var(--ab-line); }
+.ab-logo { grid-area:1/1; display:flex; flex-direction:column; align-items:center; gap:12px; font:700 clamp(14px,1.15vw,17px)/1 var(--ab-display); letter-spacing:-.02em; white-space:nowrap; }
+.ab-logo svg { flex:none; width:clamp(26px,2.2vw,32px); height:auto; }
+.ab-logo.is-out { animation:ab-logo-out .5s cubic-bezier(.5,0,.75,0) calc(var(--i) * 90ms) both; }
+.ab-logo.is-in { animation:ab-logo-in .8s var(--ab-ease) calc(var(--i) * 90ms + 120ms) both; }
+@keyframes ab-logo-out { to { opacity:0; transform:translateY(-40%); filter:blur(10px); } }
+@keyframes ab-logo-in { from { opacity:0; transform:translateY(40%); filter:blur(10px); } }
+.ab-cloud.is-static { display:flex; flex-wrap:wrap; gap:28px 36px; padding-block:28px; }
+.ab-cloud.is-static .ab-logo { flex-direction:row; gap:10px; }
+.ab-pause { display:inline-flex; align-items:center; gap:8px; min-height:44px; margin-top:6px; padding:0; border:0; background:none; color:var(--ab-quiet); cursor:pointer; transition:color .2s; }
+.ab-pause:is(:hover,:focus-visible,[aria-pressed='true']) { color:var(--ab-ink); }
+
+/* Nox. The frames carry their own arc and floor; only their outer edge dissolves into the black. */
+.ab-figure { position:relative; grid-column:2; grid-row:1/3; align-self:end; justify-self:end; width:min(100% + 6vw, 86svh); aspect-ratio:1; margin-right:calc(var(--ab-gutter) * -.5); }
+.ab-figure canvas {
+  display:block; width:100%; height:100%; object-fit:contain;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent),linear-gradient(transparent,#000 9%,#000 84%,transparent);
+  -webkit-mask-composite:source-in;
+  mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent),linear-gradient(transparent,#000 9%,#000 84%,transparent);
+  mask-composite:intersect;
+}
+
+/* His word balloon, set over the frame just above the open hand of the stack gesture. */
+.ab-bubble {
+  position:absolute; left:3%; top:25%; margin:0; padding:.72em 1.15em; border-radius:20px;
+  background:#fff; color:#0a0a0a; font:700 clamp(15px,1.35vw,20px)/1 var(--ab-display); letter-spacing:-.02em; white-space:nowrap;
+  display:flex; align-items:center; gap:10px;
+  opacity:0; transform:translateY(10px) scale(.8); transform-origin:72% 100%;
+  transition:opacity .25s ease,transform .25s ease;
+}
+.ab-bubble::before { content:''; width:8px; height:8px; border-radius:50%; background:var(--ab-red); }
+.ab-bubble::after { content:''; position:absolute; left:68%; bottom:-9px; width:18px; height:18px; background:#fff; clip-path:polygon(0 0,100% 0,62% 100%); }
+.ab-bubble.is-on { opacity:1; transform:none; transition:opacity .35s ease,transform .6s cubic-bezier(.34,1.56,.64,1); }
+
+/* Chapters: where the reader is, with a red thread that fills as the stage plays. */
+.ab-chapters { grid-area:2/1; position:relative; z-index:2; max-width:36rem; color:var(--ab-quiet); }
+.ab-chapters ol { display:flex; flex-wrap:wrap; gap:8px clamp(16px,2vw,28px); margin:0 0 14px; padding:0; list-style:none; }
+.ab-chapters li { display:flex; gap:8px; transition:color .4s ease; }
+.ab-chapters li b { font-weight:inherit; }
+.ab-chapters li span { transition:color .4s ease; }
+.ab-chapters li.is-current { color:var(--ab-ink); }
+.ab-chapters li.is-current span { color:var(--ab-red-lit); }
+.ab-track { display:block; height:1px; background:var(--ab-line); }
+.ab-progress { display:block; height:100%; background:var(--ab-red); transform-origin:0 50%; }
+
+/* Narrow screens: Nox above, the words below, overlapping his fading floor.
+   From the path on, the stage pulls back (scripted) to give the words the room they need. */
+@media(max-width:1000px) {
+  .ab-scene { height:265svh; }
+  .ab-stage-in { grid-template-columns:minmax(0,1fr); grid-template-rows:minmax(0,1fr) auto; row-gap:clamp(14px,2.4svh,24px); padding-top:clamp(76px,10svh,92px); padding-bottom:clamp(20px,3svh,32px); }
+  .ab-figure { grid-area:1/1; align-self:start; justify-self:center; width:auto; height:min(60%,118vw); max-width:none; margin:0; transform-origin:50% 0; }
+  .ab-panels { grid-area:1/1; align-self:end; align-items:end; }
+  .ab-panel { align-self:end; }
+  .ab-chapters { grid-area:2/1; max-width:none; }
+  .ab-title { font-size:clamp(42px,9.4vw,84px); }
+  .ab-cue { margin-top:clamp(14px,2.2svh,24px); }
+  .ab-path, .ab-stack { max-width:40rem; }
+  .ab-bubble { left:2%; top:23%; font-size:clamp(17px,3.6vw,24px); }
+}
+@media(max-width:560px) {
+  .ab { --ab-tuck:28px; }
+  .ab-meta { grid-template-columns:1fr auto; }
+  .ab-meta>span:nth-child(2) { display:none; }
+  .ab-title { font-size:clamp(38px,11.6vw,58px); }
+  .ab-cue { font-size:17px; gap:12px; }
+  .ab-kicker { margin-bottom:10px; }
+  .ab-path-title { display:none; }
+  .ab-stack-title { font-size:21px; }
+  .ab-facts { margin-top:0; }
+  .ab-fact { grid-template-columns:5.2rem minmax(0,1fr); gap:2px 12px; padding-block:10px; }
+  .ab-fact strong { font-size:14.5px; }
+  .ab-fact dd span { font-size:12.5px; line-height:1.45; }
+  .ab-link { margin-top:6px; }
+  .ab-cloud-wrap { margin-top:14px; }
+  .ab-slot { min-height:96px; }
+  .ab-logo { font-size:13px; gap:10px; }
+  .ab-logo svg { width:24px; }
+  /* Only the current chapter keeps its name; the rest stay as numbers. */
+  .ab-chapters ol { justify-content:space-between; }
+  .ab-chapters li:not(.is-current) b { display:none; }
+}
+
+/* Without motion: no runway and no swaps. Every panel is laid out in turn beside a still Nox. */
+@media(prefers-reduced-motion:reduce) {
+  .ab { padding-bottom:clamp(72px,8vw,120px); }
+  .ab-scene { height:auto; }
+  .ab-stage { position:relative; height:auto; min-height:0; overflow:visible; }
+  .ab-stage-in { padding-block:clamp(40px,5vw,72px) 0; align-items:start; }
+  .ab-panels { display:flex; flex-direction:column; align-items:stretch; gap:clamp(56px,7vw,96px); }
+  .ab-facts { margin-top:clamp(16px,2vw,28px); }
+  .ab-panel { pointer-events:auto; }
+  .ab-figure { position:sticky; top:12svh; align-self:start; }
+  .ab-chapters, .ab-bubble { display:none; }
+  .ab-link::after, .ab-link svg, .ab-chapters li { transition:none; }
+}
+@media(prefers-reduced-motion:reduce) and (max-width:1000px) {
+  .ab-panel { align-self:auto; }
+  .ab-figure { position:relative; top:auto; grid-area:auto; height:auto; width:min(100%,480px); order:-1; }
+  .ab-stage-in { display:flex; flex-direction:column; gap:40px; }
+  .ab-path-title { display:block; }
+}
+@media(forced-colors:active) {
+  .ab-rule, .ab-link::after, .ab-progress, .ab-cue-mark { background:CanvasText; }
+  .ab-line--red { color:CanvasText; }
+  .ab-bubble { border:1px solid CanvasText; }
+}

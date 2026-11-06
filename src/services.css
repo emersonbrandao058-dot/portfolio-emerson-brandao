@@ -1,0 +1,165 @@
+/* Services. An editorial index in graphite: the hero's black and red, one step up in tone.
+   Large titles on hairlines; the selected one floods with a lighter graphite and opens its brief.
+   Like the hero and the projects, it ignores the light/dark theme. */
+.sv {
+  --sv-ground:#0f0f10; --sv-raise:#27282c; --sv-ink:#ececea; --sv-muted:#a6a6a2; --sv-quiet:#85857f; --sv-red:#f2161f; --sv-red-lit:#ff4a50;
+  --sv-line:rgba(255,255,255,.11);
+  --sv-gutter:clamp(20px,5vw,72px);
+  --sv-radius:clamp(28px,4vw,56px);
+  --sv-display:'Manrope','DM Sans',sans-serif;
+  --sv-mono:'JetBrains Mono','Cascadia Code',ui-monospace,Consolas,monospace;
+  --sv-ease:cubic-bezier(.2,.8,.2,1);
+  --sv-wipe:cubic-bezier(.7,0,.2,1);
+  position:relative; z-index:2; isolation:isolate; overflow:clip;
+  /* The edge rises over the foot of the projects: graphite laid over black, with a lit rim. */
+  margin-top:calc(var(--sv-radius) * -1);
+  padding-block:clamp(64px,7vw,112px) clamp(40px,5vw,72px);
+  border-radius:var(--sv-radius);
+  background:linear-gradient(var(--sv-ground),#131315 70%,#0f0f10); color:var(--sv-ink); color-scheme:dark;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.13),inset 0 0 0 1px rgba(255,255,255,.04);
+}
+.sv:focus { outline:none; }
+.sv ::selection { background:var(--sv-red); color:#fff; }
+.sv :is(a,button):focus-visible { outline:2px solid #fff; outline-offset:4px; }
+.sv-wrap { max-width:1440px; margin-inline:auto; padding-inline:var(--sv-gutter); }
+/* The index recedes (fade + rise) as the about rises under it: on layers of their own, that is compositing only. */
+.sv-head, .sv-list { will-change:transform,opacity; }
+.sv-mono { font-family:var(--sv-mono); font-size:12px; font-weight:500; line-height:1.4; letter-spacing:.04em; text-transform:uppercase; }
+
+/* Opening: set exactly like the projects' (one centred sentence and its lede at a calm second size),
+   so the index below stays the protagonist and the two sections read as one voice. */
+.sv-head { max-width:62rem; margin-inline:auto; text-align:center; }
+.sv-title { margin:0 auto; max-width:19em; font:700 clamp(32px,calc(3.2vw + 14px),64px)/1.06 var(--sv-display); letter-spacing:-.04em; text-wrap:balance; }
+.sv-accent { color:var(--sv-red); white-space:nowrap; }
+.sv-split-line { padding-bottom:.06em; }
+.sv-lede { max-width:44ch; margin:clamp(20px,2vw,28px) auto 0; font-size:clamp(16px,1.25vw,19px); line-height:1.6; color:#bdbdbd; text-wrap:pretty; }
+
+/* The index. */
+.sv-list { margin:clamp(48px,5vw,80px) 0 0; padding:0; list-style:none; }
+.sv-rule { position:absolute; inset:0 0 auto; display:block; height:1px; background:var(--sv-line); transform-origin:0 50%; pointer-events:none; }
+.sv>.sv-rule { position:relative; inset:auto; }
+.sv-item { position:relative; isolation:isolate; }
+/* The band: it wipes through the row in the direction the selection moves. */
+.sv-item::before { content:''; position:absolute; z-index:-1; inset:0; background:var(--sv-raise); transform:scaleY(0); transform-origin:var(--sv-origin,50% 100%); transition:transform .65s var(--sv-wipe); }
+.sv-item.is-active::before { transform:scaleY(1); }
+/* A red thread draws across the top of the selected band. */
+.sv-item::after { content:''; position:absolute; z-index:1; inset:0 0 auto; height:2px; background:var(--sv-red); transform:scaleX(0); transform-origin:0 50%; transition:transform .45s var(--sv-wipe); pointer-events:none; }
+.sv-item.is-active::after { transform:scaleX(1); transition-duration:.9s; transition-delay:.25s; }
+
+.sv-row {
+  --sv-inset:max(var(--sv-gutter),calc((100% - 1440px) / 2 + var(--sv-gutter)));
+  position:relative; display:grid; align-items:center;
+  grid-template-columns:minmax(48px,.55fr) minmax(0,5.2fr) minmax(0,3.7fr);
+  grid-template-areas:'num name aside';
+  column-gap:clamp(16px,2.4vw,40px);
+  min-height:clamp(272px,22vw,340px); padding:clamp(32px,3vw,44px) var(--sv-inset);
+  color:var(--sv-ink); transition:color .3s ease .12s;
+}
+.sv-item.is-active .sv-row { color:#fff; }
+.sv-item:has(.sv-trigger:focus-visible) .sv-row { outline:2px solid #fff; outline-offset:-8px; }
+
+.sv-num { grid-area:num; align-self:start; margin-top:.6em; color:var(--sv-quiet); transition:color .3s ease .12s; }
+.sv-item.is-active .sv-num { color:var(--sv-red-lit); }
+
+.sv-name { grid-area:name; margin:0; transition:transform .8s var(--sv-ease); }
+.sv-item.is-active .sv-name { transform:translateX(clamp(8px,1.6vw,28px)); }
+.sv-trigger { position:static; display:block; margin:0; padding:0; border:0; background:none; color:inherit; font:800 clamp(44px,calc(6.1vw - 1px),92px)/.92 var(--sv-display); letter-spacing:-.055em; text-align:left; cursor:pointer; }
+.sv-trigger:focus-visible { outline:none; }
+/* The whole row is the target; the link inside the brief stays above it. */
+.sv-trigger::after { content:''; position:absolute; inset:0; z-index:1; }
+.sv-line { display:block; overflow:hidden; padding:.08em 0 .2em; margin:-.08em 0 -.2em; }
+.sv-line>span { display:block; }
+
+/* At rest: three words that say what the format is for. They give way to the brief. */
+.sv-keys { grid-area:aside; display:flex; flex-wrap:wrap; margin:0; padding:0; list-style:none; color:var(--sv-muted); transition:opacity .35s ease,transform .5s var(--sv-ease); }
+.sv-keys li:not(:last-child)::after { content:'/'; padding-inline:9px; color:var(--sv-red); }
+.sv-item.is-active .sv-keys { opacity:0; transform:translateY(-8px); }
+.sv-toggle { display:none; }
+
+.sv-panel { grid-area:aside; align-self:center; visibility:hidden; transition:visibility 0s linear .3s; }
+.sv-item.is-active .sv-panel { visibility:visible; transition-delay:0s; }
+.sv-panel-in { display:flex; flex-direction:column; align-items:flex-start; gap:clamp(12px,1.1vw,16px); }
+.sv-panel-in>* { margin:0; opacity:0; transform:translateY(14px); transition:opacity .25s ease,transform .25s ease; }
+.sv-item.is-active .sv-panel-in>* { opacity:1; transform:none; transition:opacity .6s ease calc(.22s + var(--n,0) * .06s),transform .8s var(--sv-ease) calc(.22s + var(--n,0) * .06s); }
+.sv-panel-in>:nth-child(2) { --n:1; } .sv-panel-in>:nth-child(3) { --n:2; } .sv-panel-in>:nth-child(4) { --n:3; }
+.sv-promise { font:700 clamp(19px,1.7vw,24px)/1.2 var(--sv-display); letter-spacing:-.025em; text-wrap:balance; }
+.sv-desc { max-width:46ch; font-size:clamp(14.5px,1.1vw,16px); line-height:1.6; color:rgba(255,255,255,.72); text-wrap:pretty; }
+.sv-deliver { display:grid; grid-template-columns:repeat(2,minmax(0,auto)); gap:6px clamp(20px,2.4vw,36px); padding:0; list-style:none; color:#fff; }
+.sv-deliver li { display:flex; align-items:center; gap:10px; font-size:11.5px; }
+.sv-deliver li::before { content:''; flex:none; width:10px; height:1.5px; background:var(--sv-red); }
+
+/* Action: the hero's white pill, its red dot floods the pill on hover. */
+.sv-cta, .sv-talk { position:relative; z-index:2; isolation:isolate; overflow:hidden; display:inline-flex; align-items:center; justify-content:space-between; gap:18px; min-height:52px; padding:4px 4px 4px 22px; border-radius:999px; font-size:15px; font-weight:600; white-space:nowrap; transition:color .4s var(--sv-ease),transform .2s; }
+.sv-cta, .sv-talk { background:#fff; color:#0a0a0a; }
+.sv-cta { margin-top:clamp(2px,.6vw,8px)!important; }
+:is(.sv-cta,.sv-talk)::before { content:''; position:absolute; z-index:-1; right:4px; top:50%; width:44px; height:44px; margin-top:-22px; border-radius:50%; background:var(--sv-red); transition:transform .6s var(--sv-wipe); }
+:is(.sv-cta-icon,.sv-talk-icon) { display:grid; place-items:center; flex:none; width:44px; height:44px; border-radius:50%; color:#fff; transition:transform .5s var(--sv-ease); }
+:is(.sv-cta,.sv-talk):active { transform:scale(.97); }
+:is(.sv-cta,.sv-talk):focus-visible { color:#fff; }
+:is(.sv-cta,.sv-talk):focus-visible::before { transform:scale(12); }
+:is(.sv-cta,.sv-talk):focus-visible :is(.sv-cta-icon,.sv-talk-icon) { transform:rotate(45deg); }
+
+/* Closing: a way out for anyone who does not yet know which format fits. */
+.sv-close { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:24px 40px; padding-block:clamp(28px,3.4vw,48px) 0; }
+.sv-close p { display:flex; flex-direction:column; gap:6px; max-width:36rem; margin:0; font:700 clamp(22px,2.3vw,32px)/1.12 var(--sv-display); letter-spacing:-.035em; }
+.sv-close p span { font:400 clamp(15px,1.2vw,17px)/1.5 'DM Sans',sans-serif; letter-spacing:0; color:var(--sv-muted); }
+
+@media(hover:hover) and (pointer:fine) {
+  .sv-cta:hover, .sv-talk:hover { color:#fff; }
+  :is(.sv-cta,.sv-talk):hover::before { transform:scale(12); }
+  :is(.sv-cta,.sv-talk):hover :is(.sv-cta-icon,.sv-talk-icon) { transform:rotate(45deg); }
+}
+
+/* Touch and narrower screens: a plain accordion. Tap a title to open its brief. */
+@media(max-width:1100px) {
+  .sv-row {
+    grid-template-columns:minmax(0,1fr) auto; grid-template-areas:'num toggle' 'name name' 'keys keys' 'panel panel';
+    row-gap:0; min-height:0; padding-block:26px 28px;
+  }
+  .sv-num { align-self:center; margin:0; }
+  .sv-trigger { margin-top:10px; font-size:clamp(36px,11.4vw,76px); }
+  .sv-name { grid-area:name; }
+  .sv-item.is-active .sv-name { transform:none; }
+  .sv-keys { grid-area:keys; margin-top:14px; transition:color .3s ease .12s; }
+  .sv-item.is-active .sv-keys { opacity:1; transform:none; color:rgba(255,255,255,.62); }
+  .sv-toggle { grid-area:toggle; position:relative; z-index:2; display:grid; place-items:center; width:40px; height:40px; border:1.5px solid var(--sv-line); border-radius:50%; pointer-events:none; transition:background-color .4s,border-color .4s,transform .6s var(--sv-ease); }
+  .sv-toggle i { grid-area:1/1; width:14px; height:1.5px; background:currentColor; }
+  .sv-toggle i:last-child { transform:rotate(90deg); transition:transform .5s var(--sv-ease); }
+  .sv-item.is-active .sv-toggle { border-color:var(--sv-red); background:var(--sv-red); transform:rotate(180deg); }
+  .sv-item.is-active .sv-toggle i:last-child { transform:rotate(0); }
+
+  .sv-panel { grid-area:panel; align-self:stretch; display:grid; grid-template-rows:0fr; transition:grid-template-rows .6s var(--sv-ease),visibility 0s linear .6s; }
+  .sv-item.is-active .sv-panel { grid-template-rows:1fr; transition-delay:0s; }
+  .sv-panel-in { min-height:0; overflow:hidden; }
+  .sv-promise { padding-top:22px; }
+  .sv-desc { max-width:52ch; }
+  .sv-panel-in { gap:14px; }
+  .sv-cta { margin-top:6px!important; }
+}
+@media(max-width:380px) {
+  .sv-accent { white-space:normal; }
+}
+@media(max-width:560px) {
+  .sv { --sv-radius:28px; }
+  .sv-deliver { grid-template-columns:minmax(0,1fr); }
+  .sv-deliver li { font-size:12px; }
+  .sv-cta, .sv-talk { width:100%; }
+  .sv-close { flex-direction:column; align-items:stretch; }
+}
+
+@media(prefers-reduced-motion:reduce) {
+  .sv-item::before, .sv-item::after, .sv-panel-in>*, .sv-panel { transition:none!important; }
+}
+@media(forced-colors:active) {
+  .sv-item.is-active { border:2px solid CanvasText; }
+  .sv-item::before { display:none; }
+  .sv-item.is-active .sv-row { color:CanvasText; }
+  .sv-desc, .sv-keys { color:CanvasText!important; }
+}
+
+/* The fixed navigation takes this graphite while it sits over the section. */
+.global-navigation.over-services:not(.is-open)::before { background:#0f0f10; border-bottom-color:#26262a; }
+.global-navigation.over-services:not(.is-open) .navigation-dock { background:#0f0f10; border-color:#2a2a2e; color:#f5f5f5; color-scheme:dark; }
+.global-navigation.over-services:not(.is-open) .navigation-dock button { color:#f5f5f5; }
+.global-navigation.over-services:not(.is-open) .navigation-dock button:is(:hover,:focus-visible) { background:#1e1e21; }
+.global-navigation.over-services:not(.is-open) .navigation-dock button:focus-visible { outline-color:#fff; }

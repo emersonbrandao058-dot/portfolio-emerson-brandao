@@ -1,6 +1,6 @@
 # Emerson Brandão — Portfólio
 
-Código-fonte editável do portfólio em React + Vite. Inclui os temas dark/light, retrato, três projetos, terminal animado, stack em loop, contatos e currículo PDF.
+Código-fonte editável do portfólio em React + Vite: identidade escura em preto, branco e vermelho, hero com retrato, projetos com prévia navegável, serviços, apresentação interativa do Nox (GSAP + 188 frames), FAQ, contato e currículo PDF. Disponível em português (padrão) e inglês.
 
 ## Rodar no computador
 
@@ -32,28 +32,21 @@ Os caminhos das imagens e dos currículos respeitam a base configurada no Vite.
 
 ## Onde editar
 
-- `src/App.jsx`: textos, projetos, navegação, experiência e contato.
-- `src/portfolio.css`: composição e responsividade.
-- `src/theme.css`: cores e tokens do tema escuro.
-- `src/magic-effects.css`: terminal e tema claro.
-- `src/SocialButtons.jsx`: redes sociais (somente links preenchidos aparecem).
-- `src/TechStack.jsx`: tecnologias exibidas no loop.
-- `src/components/magicui/`: terminal e botão de tema.
-- `public/assets/`: retrato e capas dos projetos.
-- `public/curriculo.html` e `public/curriculo-emerson-brandao.pdf`: currículo.
-
-O PDF já está incluído e não precisa de Python para executar o site. Se alterar o currículo HTML, o script opcional `scripts/generate-resume.py` permite recriar o PDF com Python, ReportLab e fontes DejaVu Sans instaladas.
+- `src/locales.js`: **todos os textos**, em português (`pt`) e inglês (`en`). Ao editar um idioma, mantenha o outro em sincronia.
+- `src/i18n.jsx`: idioma atual, preferência salva (`localStorage`) e seletor PT / EN do cabeçalho.
+- `src/App.jsx`: estrutura da página, navegação e contato.
+- `src/Hero.jsx`, `src/Projects.jsx`, `src/ProjectPreview.jsx`, `src/Services.jsx`, `src/About.jsx` (Nox), `src/StackCloud.jsx`, `src/Faq.jsx`: seções.
+- `src/projects-data.js` e `src/services-data.js`: links, imagens e ids (sem texto).
+- `src/base.css`: reset e tokens; `src/portfolio.css`: navegação e contato; `src/language-switch.css`: seletor de idioma; demais `*.css`: uma folha por seção.
+- `public/assets/`: retrato, capturas dos projetos e frames do Nox.
+- `public/curriculo-emerson-brandao.pdf`: currículo em português (o mesmo arquivo nos dois idiomas).
 
 ## Estado do conteúdo
 
 - UltraEnergy e JJ Style apontam para os respectivos sites.
-- Bacelar Educa permanece em desenvolvimento, com solicitação de apresentação por e-mail.
+- Bacelar Educa permanece em desenvolvimento, com solicitação de apresentação pelo WhatsApp.
 - LinkedIn e Instagram estão sem URL e ficam ocultos até preenchimento.
 - O período do emprego e a previsão de conclusão do curso ainda precisam ser completados com dados confirmados no currículo.
-
-## Componentes de terceiros
-
-As licenças dos componentes React Bits e Magic UI estão preservadas junto aos respectivos componentes. Consulte `docs/third-party-notices.md` antes de redistribuir.
 
 ## Origem
 

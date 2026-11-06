@@ -1,0 +1,126 @@
+/* Cinematic opening: black, red and white. The portrait has a pure black ground,
+   so this section stays dark. */
+.cine {
+  --ink:#f5f5f5; --muted:#c4c4c4; --red:#f2161f; --line:rgba(255,255,255,.16);
+  --cine-gutter:clamp(20px,5vw,72px);
+  --cine-display:'Manrope','DM Sans',sans-serif;
+  --cine-ease:cubic-bezier(.2,.8,.2,1);
+  position:relative; isolation:isolate; overflow:hidden; display:flex; flex-direction:column;
+  min-height:max(100svh,660px); background:#000; color:var(--ink); color-scheme:dark;
+}
+/* The photograph and its light always end in black before the next section, even mid-parallax. */
+.cine::after { content:''; position:absolute; z-index:1; inset:auto 0 0; height:min(26%,240px); background:linear-gradient(transparent,#000 82%); pointer-events:none; }
+.cine :is(a,button):focus-visible { outline:2px solid #fff; outline-offset:4px; }
+.cine ::selection { background:var(--red); color:#fff; }
+
+/* Bar: wordmark and three plain links; the fixed language/menu dock sits to the right. */
+.cine-bar { position:relative; z-index:3; display:flex; align-items:center; gap:clamp(28px,4vw,64px); min-height:96px; padding:24px calc(var(--cine-gutter) + 64px) 24px var(--cine-gutter); }
+.cine-brand { font:700 17px/1 var(--cine-display); letter-spacing:-.02em; color:var(--ink); }
+.cine-brand span { color:var(--red); }
+.cine-bar nav { display:flex; gap:clamp(20px,2.4vw,34px); font-size:15px; }
+.cine-bar nav a { position:relative; padding-block:10px; color:var(--muted); transition:color .2s; }
+.cine-bar nav a::after { content:''; position:absolute; left:50%; bottom:0; width:5px; height:5px; margin-left:-2.5px; border-radius:50%; background:var(--red); transform:scale(0); transition:transform .3s var(--cine-ease); }
+.cine-bar nav a:is(:hover,:focus-visible) { color:var(--ink); }
+.cine-bar nav a:is(:hover,:focus-visible)::after { transform:scale(1); }
+
+/* Portrait: an independent image, centred and anchored to the top, fading into the ground. */
+.cine-portrait { position:absolute; z-index:0; top:clamp(0px,1.4vh,20px); left:50%; width:min(92vw,188svh); aspect-ratio:1672/941; translate:-50% 0; pointer-events:none; }
+/* Both parallax planes keep their layers for the whole scroll, so leaving the hero never repaints them. */
+.cine-portrait, .cine-stage { will-change:transform; }
+.cine-frame { position:absolute; inset:0; transform-origin:50% 32%; }
+.cine-frame img, .cine-lens { position:absolute; inset:0; display:block; width:100%; height:100%; }
+.cine-frame img { object-fit:cover; object-position:50% 0; -webkit-mask-image:linear-gradient(#000 60%,transparent 97%); mask-image:linear-gradient(#000 60%,transparent 97%); }
+
+/* Red key light behind the head. "lighten" only adds red where the photo is darker
+   than the light, so skin and the black lenses stay untouched. */
+.cine-glow { position:absolute; left:50%; top:30%; width:66%; aspect-ratio:1.22; translate:-50% -50%; mix-blend-mode:lighten; }
+.cine-glow::before { content:''; position:absolute; inset:0; border-radius:50%; background:radial-gradient(closest-side,transparent 24%,rgba(176,9,17,.3) 58%,rgba(116,4,10,.12) 80%,transparent 100%); animation:cine-breathe 7s ease-in-out infinite alternate; }
+@keyframes cine-breathe { from { opacity:.68; transform:scale(.97); } to { opacity:1; transform:scale(1.03); } }
+
+/* The terminal reflected in the lenses. "screen" only lightens, as a reflection does. */
+.cine-lens { mix-blend-mode:screen; overflow:hidden; }
+.lens-content { opacity:.6; }
+.lens-panel { fill:#fff; opacity:.055; }
+.lens-panel-bar { fill:#fff; opacity:.09; }
+.term-row { font:500 7.4px/1 'Cascadia Code',ui-monospace,Consolas,monospace; fill:#cfc7c2; }
+.term-row.is-cmd { fill:#fff; }
+.term-row.is-ok { fill:#ff4b4b; }
+.term-prompt { fill:#ff3a3a; }
+.term-cursor { fill:#ff3a3a; animation:term-blink 1s steps(1) infinite; }
+@keyframes term-blink { 50% { fill-opacity:0; } }
+.lens-glint { animation:lens-glint 9s cubic-bezier(.55,0,.3,1) 1.4s infinite; }
+@keyframes lens-glint { from { transform:translateX(0); } 15%, to { transform:translateX(560px); } }
+/* Once the portrait is mostly out of view the ambient loops rest: the glint and the cursor are SVG
+   animations, repainted on the main thread every frame, right while the reader is scrolling on. */
+.cine.is-away .cine-glow::before, .cine.is-away .lens-glint, .cine.is-away .term-cursor { animation-play-state:paused; }
+
+/* Copy: headline top-left, statement bottom-right, the face between them. */
+.cine-stage { position:relative; z-index:2; flex:1; display:grid; grid-template-columns:minmax(0,1fr) 30vw minmax(0,1fr); padding:clamp(8px,3vh,40px) var(--cine-gutter) clamp(36px,7vh,80px); }
+.cine-lead { grid-column:1; align-self:center; padding-bottom:clamp(24px,8vh,96px); }
+.cine-title { margin:0; font:800 clamp(48px,5.6vw,104px)/.9 var(--cine-display); letter-spacing:-.045em; text-transform:uppercase; }
+.cine-line { display:block; overflow:hidden; padding:.1em 0 .06em; margin:-.1em 0 -.06em; }
+.cine-line>span { display:block; }
+.cine-line--red { color:var(--red); }
+.cine-sub { max-width:34ch; margin:clamp(22px,2.4vw,34px) 0 0; font-size:clamp(16px,1.2vw,18px); line-height:1.6; color:var(--muted); }
+.cine-actions { display:flex; flex-wrap:wrap; gap:12px 14px; margin-top:clamp(28px,3vw,40px); }
+
+.cine-cta { position:relative; isolation:isolate; overflow:hidden; display:inline-flex; align-items:center; justify-content:space-between; gap:22px; min-height:60px; padding:6px 6px 6px 28px; border-radius:999px; background:#fff; color:#0a0a0a; font-size:16px; font-weight:600; transition:color .4s var(--cine-ease),transform .2s; }
+.cine-cta::before { content:''; position:absolute; z-index:-1; right:6px; top:50%; width:48px; height:48px; margin-top:-24px; border-radius:50%; background:var(--red); transition:transform .6s cubic-bezier(.7,0,.2,1); }
+.cine-cta-icon { display:grid; place-items:center; flex:none; width:48px; height:48px; border-radius:50%; color:#fff; transition:transform .5s var(--cine-ease); }
+.cine-ghost { display:inline-flex; align-items:center; min-height:60px; padding:0 30px; border:1.5px solid rgba(255,255,255,.34); border-radius:999px; color:var(--ink); font-size:16px; font-weight:500; transition:border-color .25s,background-color .25s,transform .2s; }
+.cine-cta:focus-visible { color:#fff; }
+.cine-cta:focus-visible::before { transform:scale(13); }
+.cine-cta:focus-visible .cine-cta-icon { transform:rotate(45deg); }
+.cine-ghost:focus-visible { border-color:#fff; background:rgba(255,255,255,.08); }
+@media(hover:hover) and (pointer:fine) {
+  .cine-cta:hover { color:#fff; }
+  .cine-cta:hover::before { transform:scale(13); }
+  .cine-cta:hover .cine-cta-icon { transform:rotate(45deg); }
+  .cine-ghost:hover { border-color:#fff; background:rgba(255,255,255,.08); }
+}
+.cine-cta:active, .cine-ghost:active { transform:scale(.97); }
+
+.cine-aside { grid-column:3; align-self:end; justify-self:end; max-width:25rem; text-align:right; }
+.cine-statement { margin:0 0 20px; font:800 clamp(30px,3.1vw,56px)/.94 var(--cine-display); letter-spacing:-.04em; text-transform:uppercase; }
+.cine-statement span { display:block; }
+.cine-aside p { max-width:32ch; margin:0 0 0 auto; font-size:16px; line-height:1.6; color:var(--muted); }
+.cine-services { display:flex; flex-wrap:wrap; justify-content:flex-end; margin:22px 0 0; padding:0; list-style:none; font-size:14px; color:var(--ink); }
+.cine-services li { white-space:nowrap; }
+.cine-services li:not(:last-child)::after { content:'/'; padding-inline:10px; color:var(--red); }
+
+@media(max-width:1180px) and (min-width:901px) {
+  .cine-services { flex-direction:column; align-items:flex-end; gap:4px; }
+  .cine-services li::after { display:none; }
+}
+
+/* Tablets in portrait and phones: the portrait leads, the copy rises over the fading jacket. */
+@media(max-width:900px) {
+  .cine { min-height:0; }
+  .cine-bar { flex-direction:column; align-items:flex-start; gap:12px; min-height:0; padding:22px calc(var(--cine-gutter) + 64px) 0 var(--cine-gutter); }
+  .cine-bar nav { font-size:14px; gap:24px; }
+  .cine-portrait { --portrait-h:clamp(380px,116vw,660px); position:relative; top:auto; left:auto; translate:none; width:100%; height:var(--portrait-h); aspect-ratio:auto; margin-top:-6px; }
+  .cine-frame img { -webkit-mask-image:linear-gradient(#000 52%,transparent 94%); mask-image:linear-gradient(#000 52%,transparent 94%); }
+  /* Same light as on desktop, measured against the cropped photograph (66% of its width). */
+  .cine-glow { width:calc(var(--portrait-h) * 1.1727); }
+  .cine-stage { display:flex; flex-direction:column; gap:56px; margin-top:clamp(-260px,-32vw,-120px); padding-top:0; padding-bottom:48px; }
+  .cine-lead { align-self:stretch; padding-bottom:0; }
+  .cine-title { font-size:clamp(46px,13vw,96px); }
+  .cine-sub { max-width:40ch; }
+  .cine-aside { align-self:stretch; justify-self:auto; max-width:none; text-align:left; }
+  .cine-aside p { margin:0; }
+  .cine-services { justify-content:flex-start; }
+}
+@media(max-width:520px) {
+  .cine-actions { flex-direction:column; align-items:stretch; }
+  .cine-ghost { justify-content:center; }
+  .cine-statement { font-size:clamp(32px,9.6vw,44px); }
+}
+
+@media(prefers-reduced-motion:reduce) {
+  .cine-glow::before, .lens-glint, .term-cursor { animation:none; }
+  .lens-glint { display:none; }
+}
+@media(forced-colors:active) {
+  .cine-glow, .cine-lens { display:none; }
+  .cine-cta, .cine-ghost { border:1px solid CanvasText; }
+}

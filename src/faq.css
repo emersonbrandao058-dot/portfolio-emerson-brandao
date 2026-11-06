@@ -1,0 +1,135 @@
+/* FAQ. The black of the about carries on; each question is a rounded slab lit from its left edge
+   in the hero's red. The light grows on hover and floods in when the answer opens. Only opacity
+   and transform animate on the light, so the effect stays on the compositor.
+   Like the sections before it, it ignores the light/dark theme. Its rounded foot tucks over the
+   contact, the way the services' edge rises over the projects. */
+.fq {
+  --fq-ink:#f5f5f5; --fq-muted:#b4b4b0; --fq-quiet:#8a8a85; --fq-red:#f2161f; --fq-red-lit:#ff4a50;
+  --fq-line:rgba(255,255,255,.08);
+  --fq-gutter:clamp(20px,5vw,72px);
+  --fq-tuck:clamp(28px,4vw,56px);
+  --fq-pad:clamp(18px,2.2vw,30px);
+  --fq-num:clamp(30px,3vw,44px);
+  --fq-display:'Manrope','DM Sans',sans-serif;
+  --fq-mono:'JetBrains Mono','Cascadia Code',ui-monospace,Consolas,monospace;
+  --fq-ease:cubic-bezier(.2,.8,.2,1);
+  position:relative; z-index:2; isolation:isolate;
+  padding-block:clamp(72px,9vw,144px) clamp(72px,8vw,128px);
+  border-radius:0 0 var(--fq-tuck) var(--fq-tuck);
+  background:#000; color:var(--fq-ink); color-scheme:dark;
+  box-shadow:inset 0 -1px 0 rgba(255,255,255,.1);
+}
+.fq ::selection { background:var(--fq-red); color:#fff; }
+.fq :is(a,button):focus-visible { outline:2px solid #fff; outline-offset:4px; }
+.fq-wrap { max-width:960px; margin-inline:auto; padding-inline:var(--fq-gutter); box-sizing:content-box; }
+.fq-mono { font-family:var(--fq-mono); font-size:12px; font-weight:500; line-height:1.4; letter-spacing:.04em; text-transform:uppercase; }
+
+/* Opening, centred like the projects' and the services'. */
+.fq-head { text-align:center; }
+.fq-kicker { display:inline-flex; align-items:center; gap:10px; margin:0 0 clamp(16px,1.8vw,24px); color:var(--fq-quiet); }
+.fq-kicker::before { content:''; width:7px; height:7px; border-radius:50%; background:var(--fq-red); }
+.fq-title { margin:0; font:700 clamp(32px,calc(3.2vw + 14px),60px)/1.06 var(--fq-display); letter-spacing:-.04em; text-wrap:balance; }
+.fq-accent { color:var(--fq-red); white-space:nowrap; }
+.fq-lede { max-width:42ch; margin:clamp(16px,1.8vw,24px) auto 0; font-size:clamp(16px,1.2vw,18px); line-height:1.6; color:var(--fq-muted); text-wrap:pretty; }
+
+/* The questions. */
+.fq-list { display:flex; flex-direction:column; gap:clamp(10px,1vw,14px); margin:clamp(40px,4.6vw,72px) 0 0; padding:0; list-style:none; }
+.fq-item {
+  position:relative; isolation:isolate; overflow:hidden;
+  border-radius:clamp(16px,1.6vw,22px);
+  background:#0a0a0b;
+  box-shadow:inset 0 0 0 1px var(--fq-line);
+  transition:box-shadow .5s ease;
+}
+/* The light: a red bloom anchored to the left edge, dimmed at rest. */
+.fq-item::before {
+  content:''; position:absolute; inset:0; z-index:-1; pointer-events:none;
+  background:radial-gradient(85% 150% at 0% 50%,rgba(255,74,80,.7),rgba(242,22,31,.3) 22%,rgba(120,6,12,.14) 46%,transparent 74%);
+  opacity:.42; transform:scaleX(.62); transform-origin:0 50%;
+  transition:opacity .6s ease,transform .9s var(--fq-ease);
+}
+/* Its rim: the edge itself catches the light. */
+.fq-item::after {
+  content:''; position:absolute; inset:14% auto 14% 0; z-index:-1; width:2px; pointer-events:none;
+  background:linear-gradient(transparent,var(--fq-red-lit) 30%,#ffd0d2 50%,var(--fq-red-lit) 70%,transparent);
+  opacity:.55; transform:scaleY(.6);
+  transition:opacity .6s ease,transform .9s var(--fq-ease);
+}
+.fq-item.is-open { box-shadow:inset 0 0 0 1px rgba(255,74,80,.2); }
+.fq-item.is-open::before { opacity:1; transform:none; }
+.fq-item.is-open::after { opacity:1; transform:none; }
+.fq-item:focus-within:not(.is-open)::before { opacity:.75; transform:scaleX(.8); }
+
+.fq-q { margin:0; }
+.fq-trigger {
+  display:grid; grid-template-columns:var(--fq-num) minmax(0,1fr) auto; align-items:center; gap:12px;
+  width:100%; min-height:clamp(64px,5.6vw,80px); margin:0; padding:14px var(--fq-pad);
+  border:0; background:none; color:inherit; text-align:left; cursor:pointer;
+}
+.fq-trigger:focus-visible { outline:none; }
+/* The slab is the target; its ring shows the keyboard where it is. */
+.fq-item:has(.fq-trigger:focus-visible) { box-shadow:inset 0 0 0 2px #fff; }
+.fq-num { color:var(--fq-quiet); transition:color .3s ease; }
+.fq-item.is-open .fq-num { color:var(--fq-red-lit); }
+.fq-text { font:600 clamp(16px,1.3vw,19px)/1.35 var(--fq-display); letter-spacing:-.015em; text-wrap:balance; transition:transform .6s var(--fq-ease); }
+
+/* Plus to minus: the upright bar turns flat as the circle fills with red. */
+.fq-icon { position:relative; display:grid; place-items:center; flex:none; width:36px; height:36px; border:1.5px solid rgba(255,255,255,.16); border-radius:50%; transition:background-color .4s,border-color .4s,transform .6s var(--fq-ease); }
+.fq-icon i { grid-area:1/1; width:12px; height:1.5px; background:currentColor; }
+.fq-icon i:last-child { transform:rotate(90deg); transition:transform .5s var(--fq-ease); }
+.fq-item.is-open .fq-icon { border-color:var(--fq-red); background:var(--fq-red); transform:rotate(180deg); }
+.fq-item.is-open .fq-icon i:last-child { transform:rotate(0); }
+
+/* The answer opens with its row, then settles in. Closed, it is hidden from reading and search alike. */
+.fq-panel { display:grid; grid-template-rows:0fr; visibility:hidden; transition:grid-template-rows .55s var(--fq-ease),visibility 0s linear .55s; }
+.fq-item.is-open .fq-panel { grid-template-rows:1fr; visibility:visible; transition-delay:0s; }
+.fq-panel-in { min-height:0; overflow:hidden; }
+.fq-panel-in p {
+  max-width:60ch; margin:0; padding:0 calc(var(--fq-pad) + 48px) clamp(20px,2vw,28px) calc(var(--fq-pad) + var(--fq-num) + 12px);
+  font-size:clamp(15px,1.1vw,16.5px); line-height:1.65; color:rgba(255,255,255,.74); text-wrap:pretty;
+  opacity:0; transform:translateY(-6px); transition:opacity .2s ease,transform .3s ease;
+}
+.fq-item.is-open .fq-panel-in p { opacity:1; transform:none; transition:opacity .5s ease .15s,transform .7s var(--fq-ease) .15s; }
+
+@media(hover:hover) and (pointer:fine) {
+  .fq-item:not(.is-open):hover::before { opacity:.75; transform:scaleX(.8); }
+  .fq-item:not(.is-open):hover::after { opacity:.85; transform:scaleY(.8); }
+  .fq-item:not(.is-open):hover .fq-text { transform:translateX(4px); }
+  .fq-item:not(.is-open):hover .fq-icon { border-color:rgba(255,255,255,.4); }
+}
+
+/* Hand-off to the contact. */
+.fq-close { display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:6px 18px; margin-top:clamp(32px,3.6vw,52px); text-align:center; }
+.fq-close p { margin:0; font-size:clamp(15px,1.15vw,17px); color:var(--fq-muted); }
+.fq-link { position:relative; display:inline-flex; align-items:center; gap:10px; min-height:44px; padding-block:8px; border-bottom:1px solid rgba(255,255,255,.3); font:600 15px/1.2 var(--fq-display); }
+.fq-link::after { content:''; position:absolute; inset:auto 0 -1px; height:1px; background:var(--fq-red); transform:scaleX(0); transform-origin:0 50%; transition:transform .55s cubic-bezier(.7,0,.2,1); }
+.fq-link svg { color:var(--fq-red-lit); transition:transform .45s var(--fq-ease); }
+.fq-link:focus-visible::after { transform:scaleX(1); }
+.fq-link:focus-visible svg { transform:translateY(3px); }
+@media(hover:hover) and (pointer:fine) {
+  .fq-link:hover::after { transform:scaleX(1); }
+  .fq-link:hover svg { transform:translateY(3px); }
+}
+
+/* The contact starts under the rounded foot. */
+.fq + .contact-footer { margin-top:calc(clamp(28px,4vw,56px) * -1); padding-top:clamp(28px,4vw,56px); }
+
+@media(max-width:560px) {
+  .fq { --fq-tuck:28px; --fq-pad:16px; --fq-num:26px; }
+  .fq + .contact-footer { margin-top:-28px; padding-top:28px; }
+  .fq-trigger { gap:10px; }
+  .fq-icon { width:32px; height:32px; }
+  .fq-panel-in p { padding-right:var(--fq-pad); }
+  .fq-close { flex-direction:column; }
+}
+
+@media(prefers-reduced-motion:reduce) {
+  .fq-item, .fq-item::before, .fq-item::after, .fq-text, .fq-icon, .fq-icon i, .fq-panel, .fq-panel-in p, .fq-link::after, .fq-link svg, .fq-num { transition:none!important; }
+}
+@media(forced-colors:active) {
+  .fq-item { border:1px solid CanvasText; }
+  .fq-item.is-open { border-width:2px; }
+  .fq-item::before, .fq-item::after { display:none; }
+  .fq-accent { color:CanvasText; }
+  .fq-icon i, .fq-link::after { background:CanvasText; }
+}

@@ -1,0 +1,62 @@
+/* Base: reset, page tokens and the shared navigation pieces. Each section's own look lives in its file. */
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;450;500;600&display=swap');
+
+:root {
+  font-family:'DM Sans',Arial,sans-serif; font-synthesis:none; font-weight:400;
+  color-scheme:dark;
+  --canvas:#141516;
+  --surface:#202226;
+  --surface-hover:#25272c;
+  --footer:#0e0f11;
+  --ink:#efefeb;
+  --muted:#b2b3ba;
+  --quiet:#999ba5;
+  --line:#36383f;
+  --control-border:#626570;
+  --accent-hover:#5667e0;
+  color:var(--ink);
+  background:var(--canvas);
+  scrollbar-color:#575963 var(--canvas);
+  caret-color:var(--accent-hover);
+}
+* { box-sizing:border-box; }
+body { margin:0; }
+html { scroll-behavior:smooth; scroll-padding-top:50px; }
+body, main { background:var(--canvas); }
+a { color:inherit; text-decoration:none; text-underline-offset:.25em; }
+button { font:inherit; color:inherit; cursor:pointer; }
+a:focus-visible, button:focus-visible { outline:3px solid #98a4ff; outline-offset:6px; }
+::selection { color:#fff; background:#4858be; }
+
+.content { max-width:1140px; margin:auto; padding-left:34px; padding-right:34px; }
+footer { position:relative; padding-top:100px; background:var(--footer); color:var(--ink); }
+.social-links { display:flex; gap:28px; margin-top:45px; padding:0 0 20px; }
+
+.menu-button { position:fixed; top:25px; right:24px; z-index:20; display:grid; place-items:center; width:64px; height:64px; border:1px solid #626570; border-radius:50%; background:#282b34; color:var(--ink); font-size:28px; line-height:1; box-shadow:0 8px 24px #0004; opacity:0; visibility:hidden; scale:.65; pointer-events:none; transition:opacity .3s,scale .4s,visibility .3s; }
+.menu-button.is-visible { opacity:1; visibility:visible; scale:1; pointer-events:auto; }
+.menu-button.active { background:#4859d0; border-color:#8c9aff; }
+.menu-overlay { position:fixed; right:0; top:0; z-index:15; width:min(520px,100%); height:100svh; padding:110px 65px 50px; background:#1a1c21; color:var(--ink); box-shadow:-100px 0 0 100vw #0006; }
+.menu-overlay>p { font-size:11px; letter-spacing:2px; color:var(--quiet); border-bottom:1px solid var(--line); padding-bottom:24px; }
+.menu-overlay nav { display:flex; flex-direction:column; margin:35px 0 65px; }
+.menu-overlay nav a { display:flex; justify-content:space-between; font-size:58px; letter-spacing:-2px; line-height:1.6; transition:transform .35s,color .35s; }
+.menu-overlay nav a:hover { transform:translateX(12px); color:#a5afff; }
+.menu-overlay>a { font-size:14px; }
+
+.micro-button { background:var(--footer); }
+.micro-base { stroke:#626570; }
+.micro-label { color:var(--muted); }
+
+.sr-only { position:absolute; width:1px; height:1px; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); }
+.skip { position:fixed; top:-100px; left:20px; z-index:50; padding:12px; background:var(--ink); color:var(--canvas); }
+.skip:focus { top:10px; }
+
+@media (max-width:700px) {
+  .menu-button { top:17px; right:18px; width:52px; height:52px; }
+  .content { padding-left:24px; padding-right:24px; }
+  .menu-overlay { padding-left:35px; padding-right:35px; }
+  .menu-overlay nav a { font-size:48px; }
+}
+@media (prefers-reduced-motion:reduce) {
+  html { scroll-behavior:auto; }
+  *, *:before, *:after { transition:none!important; }
+}

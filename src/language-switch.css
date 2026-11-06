@@ -1,0 +1,8 @@
+/* Language switch: two quiet mono labels in the navigation dock, the active one lit in red. */
+.lang-switch { display:flex; align-items:center; height:44px; padding:0 4px; gap:2px; }
+.navigation-dock .lang-option { position:relative; display:grid; place-items:center; width:auto; min-width:36px; height:44px; padding:0 9px; border:0; border-radius:22px; background:transparent; color:inherit; opacity:.55; font:600 12px/1 ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace; letter-spacing:.08em; transition:opacity .18s,background-color .18s,color .18s; }
+.navigation-dock .lang-option + .lang-option::before { content:''; position:absolute; left:-2px; top:50%; width:1px; height:12px; margin-top:-6px; background:currentColor; opacity:.35; pointer-events:none; }
+.navigation-dock .lang-option:is(:hover,:focus-visible) { opacity:1; }
+.navigation-dock .lang-option.is-active { opacity:1; cursor:default; }
+.navigation-dock .lang-option.is-active::after { content:''; position:absolute; left:50%; bottom:7px; width:4px; height:4px; margin-left:-2px; border-radius:50%; background:#f2161f; }
+@media (prefers-reduced-motion:reduce) { .navigation-dock .lang-option { transition:none; } }
