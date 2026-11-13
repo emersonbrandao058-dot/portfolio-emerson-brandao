@@ -194,6 +194,15 @@ describe('Preloader', () => {
     expect(maxHeight).toBeLessThanOrEqual(46);
   });
 
+  // O boneco era desenhado num effect que só rodava depois da montagem do site inteiro: o primeiro
+  // paint mostrava o canvas vazio e ele só aparecia depois do primeiro travamento.
+  it('desenha o boneco já no primeiro paint (layout effect)', () => {
+    const getContext = HTMLCanvasElement.prototype.getContext;
+    render(<Preloader />, { legacyRoot: false });
+    const context = getContext.mock.results[0].value;
+    expect(context.fillRect).toHaveBeenCalled();
+  });
+
   it('marca o preloader como aria-hidden', () => {
     render(<Preloader />);
     expect(preloader().getAttribute('aria-hidden')).toBe('true');

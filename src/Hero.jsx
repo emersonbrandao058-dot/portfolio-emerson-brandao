@@ -39,6 +39,7 @@ function GlassesTerminal({ terminal }) {
     const cursor = root.querySelector('.term-cursor');
     const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
     const buffer = [];
+    let charWidth = 0;
 
     const render = () => {
       rows.forEach((row, index) => {
@@ -50,7 +51,11 @@ function GlassesTerminal({ terminal }) {
       });
       const last = buffer.length - 1;
       if (last < 0) { cursor.setAttribute('opacity', '0'); return; }
-      const width = rows[last].getComputedTextLength?.() || 0;
+      // The rows are monospaced: one measured character gives every cursor position. Measuring the
+      // row on each typed character forced a layout of the whole page every 40-110ms.
+      const length = rows[last].textContent.length;
+      if (!charWidth && length) charWidth = (rows[last].getComputedTextLength?.() || 0) / length;
+      const width = length * charWidth;
       cursor.setAttribute('x', String(8 + width + 1.5));
       cursor.setAttribute('y', String(FIRST_BASELINE + last * LINE_STEP - 6.4));
       cursor.setAttribute('opacity', '1');
@@ -107,8 +112,14 @@ function GlassesTerminal({ terminal }) {
     }, { threshold: [0, .1, .2, .3, .4, .5, .6, .7, .8, .9, 1] });
 
     render();
-    const boot = window.setTimeout(() => { observer.observe(root); document.addEventListener('visibilitychange', onVisibility); }, 1700);
+    /* Typing starts 1.7s into the hero's opening, which itself waits for the preloader: started on
+       mount, it typed (and repainted the lenses) behind the preloader and through the whole opening. */
+    let boot = 0;
+    const stopWaiting = whenPreloaderDone(() => {
+      boot = window.setTimeout(() => { observer.observe(root); document.addEventListener('visibilitychange', onVisibility); }, 1700);
+    });
     return () => {
+      stopWaiting();
       window.clearTimeout(boot);
       stop();
       observer.disconnect();

@@ -160,6 +160,13 @@ export function Preloader({ name = 'Emerson Brandão' }) {
     return () => unlockScroll.current();
   }, []);
 
+  // O boneco já aparece parado no primeiro paint, antes de a página terminar de montar.
+  useLayoutEffect(() => {
+    if (reducedMotion) return;
+    const context = runner.current?.getContext?.('2d');
+    if (context) drawSprite(context, SPRITES.runA);
+  }, [reducedMotion]);
+
   useEffect(() => {
     let active = true;
     let value = 0;
@@ -180,7 +187,6 @@ export function Preloader({ name = 'Emerson Brandão' }) {
     const timers = [];
     const later = (callback, delay) => timers.push(setTimeout(callback, delay));
     const context = reducedMotion ? null : runner.current?.getContext?.('2d') ?? null;
-    if (context) drawSprite(context, SPRITES.runA);
 
     const allowFinish = () => {
       if (assetsReady && minReached) target = 100;

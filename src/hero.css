@@ -53,6 +53,8 @@
 /* Once the portrait is mostly out of view the ambient loops rest: the glint and the cursor are SVG
    animations, repainted on the main thread every frame, right while the reader is scrolling on. */
 .cine.is-away .cine-glow::before, .cine.is-away .lens-glint, .cine.is-away .term-cursor { animation-play-state:paused; }
+/* Behind the preloader nothing of the hero is seen: its loops wait for the curtain. */
+html.is-preloading .cine-glow::before, html.is-preloading .lens-glint, html.is-preloading .term-cursor { animation-play-state:paused; }
 
 /* Copy: headline top-left, statement bottom-right, the face between them. */
 .cine-stage { position:relative; z-index:2; flex:1; display:grid; grid-template-columns:minmax(0,1fr) 30vw minmax(0,1fr); padding:clamp(8px,3vh,40px) var(--cine-gutter) clamp(36px,7vh,80px); }
