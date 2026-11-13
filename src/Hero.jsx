@@ -4,6 +4,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ArrowUpRight } from 'lucide-react';
 import { assetUrl } from './asset-url.js';
 import { useI18n } from './i18n.jsx';
+import { whenPreloaderDone } from './Preloader.jsx';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -167,13 +168,15 @@ export function Hero() {
       const [glow] = q('.cine-glow');
       const [portrait] = q('.cine-portrait');
 
-      gsap.timeline({ defaults: { ease: 'power3.out' } })
+      // The opening holds in its start pose behind the preloader and plays once the curtain is gone.
+      const opening = gsap.timeline({ defaults: { ease: 'power3.out' }, paused: true })
         .fromTo(frame, { opacity: 0, scale: 1.07 }, { opacity: 1, scale: 1, duration: 2.1, ease: 'power2.out' }, 0)
         .fromTo(glow, { opacity: 0 }, { opacity: 1, duration: 2.4, ease: 'sine.inOut' }, .5)
         .fromTo(q('.cine-bar > *'), { opacity: 0, y: -10 }, { opacity: 1, y: 0, duration: .7, stagger: .06 }, .3)
         .fromTo(q('.cine-line > span'), { yPercent: 112 }, { yPercent: 0, duration: 1.15, stagger: .1, ease: 'expo.out' }, .45)
         .fromTo(q('.cine-sub, .cine-actions > *'), { opacity: 0, y: 26 }, { opacity: 1, y: 0, duration: .9, stagger: .08 }, .85)
         .fromTo(q('.cine-aside > *'), { opacity: 0, y: 26 }, { opacity: 1, y: 0, duration: .9, stagger: .08 }, 1.05);
+      const stopWaiting = whenPreloaderDone(() => opening.play());
 
       gsap.to(portrait, { yPercent: 10, ease: 'none', scrollTrigger: { trigger: hero, start: 'top top', end: 'bottom top', scrub: true } });
       gsap.to(q('.cine-stage'), { y: -70, ease: 'none', scrollTrigger: { trigger: hero, start: 'top top', end: 'bottom top', scrub: true } });
@@ -204,7 +207,7 @@ export function Hero() {
         hero.addEventListener('pointerleave', leave);
         return () => { hero.removeEventListener('pointermove', move); hero.removeEventListener('pointerleave', leave); };
       });
-      return () => pointer.revert();
+      return () => { stopWaiting(); pointer.revert(); };
     });
     return () => media.revert();
   }, []);
